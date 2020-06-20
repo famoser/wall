@@ -46,4 +46,24 @@ class Product extends BaseEntity
      * @ORM\Column(type="integer")
      */
     private $category;
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function getCategory(): int
+    {
+        return $this->category;
+    }
+
+    public function setCategory(int $category): void
+    {
+        $this->category = $category;
+    }
 }
