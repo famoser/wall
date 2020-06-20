@@ -57,11 +57,5 @@ script:
   - php bin/console lint:twig templates
   - php vendor/bin/simple-phpunit
 
-
   # frontend
   # - yarn audit
-
-# report code coverage
-after_script:
-  # scrutinizer reporting
-  - if [[ $COVERAGE == true ]]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover ./build/logs/clover.xml; fi
