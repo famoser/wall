@@ -52,9 +52,8 @@ script:
   # backend
   - php vendor/bin/requirements-checker
   - php bin/console security:check
-  - 'if [[ "$COVERAGE" == true ]]; then ./vendor/bin/php-cs-fixer fix --diff --dry-run -v'
+  - if [[ "$COVERAGE" == true ]]; then ./vendor/bin/php-cs-fixer fix --diff --dry-run -v; fi
   - php bin/console lint:yaml config
-  - php bin/console lint:yaml translations
   - php bin/console lint:twig templates
   - php vendor/bin/simple-phpunit
 
