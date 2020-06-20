@@ -11,7 +11,7 @@ build:
     coverage:
       tests:
         override:
-          - command:  --coverage-clover=coverage.xml
+          - command: ./vendor/bin/simple-phpunit --coverage-clover=coverage.xml
             coverage:
               file: coverage.xml
               format: clover
