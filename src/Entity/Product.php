@@ -11,14 +11,17 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Base\BaseEntity;
 use App\Entity\Traits\IdTrait;
 use App\Entity\Traits\TimeTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks
+ * @ApiResource
  */
 class Product extends BaseEntity
 {
@@ -35,6 +38,7 @@ class Product extends BaseEntity
 
     /**
      * @var string
+     * @Assert\NotBlank
      *
      * @ORM\Column(type="text")
      */
@@ -42,6 +46,7 @@ class Product extends BaseEntity
 
     /**
      * @var int
+     * @Assert\Range(min=1, max=7)
      *
      * @ORM\Column(type="integer")
      */
