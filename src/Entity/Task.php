@@ -23,18 +23,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\HasLifecycleCallbacks
  * @ApiResource
  */
-class Product extends BaseEntity
+class Task extends BaseEntity
 {
     use IdTrait;
     use TimeTrait;
-
-    const CATEGORY_FRUIT_VEGETABLES = 1;
-    const CATEGORY_DAIRY_PRODUCTS_EGGS = 2;
-    const CATEGORY_BREAD_BACKED_GOODS = 3;
-    const CATEGORY_INVENTORIES = 4;
-    const CATEGORY_FROZEN_FOOD_READY_MADE_MEALS = 5;
-    const CATEGORY_DRINKS = 6;
-    const CATEGORY_HOUSEHOLD = 7;
 
     /**
      * @var string
@@ -46,19 +38,27 @@ class Product extends BaseEntity
 
     /**
      * @var int
-     * @Assert\Range(min=1, max=7)
+     * @Assert\Range(min=1, max=356)
      *
      * @ORM\Column(type="integer")
      */
-    private $category;
+    private $intervalInDays;
 
     /**
-     * @var bool
+     * @var int
      * @Assert\NotBlank
      *
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="integer")
      */
-    private $active;
+    private $reward;
+
+    /**
+     * @var \DateTime
+     * @Assert\NotBlank
+     *
+     * @ORM\Column(type="datetime")
+     */
+    private $lastExecutionAt;
 
     public function getName(): string
     {
@@ -70,23 +70,23 @@ class Product extends BaseEntity
         $this->name = $name;
     }
 
-    public function getCategory(): int
+    public function getIntervalInDays(): int
     {
-        return $this->category;
+        return $this->intervalInDays;
     }
 
-    public function setCategory(int $category): void
+    public function setIntervalInDays(int $intervalInDays): void
     {
-        $this->category = $category;
+        $this->intervalInDays = $intervalInDays;
     }
 
-    public function isActive(): bool
+    public function getReward(): int
     {
-        return $this->active;
+        return $this->reward;
     }
 
-    public function setActive(bool $active): void
+    public function setReward(int $reward): void
     {
-        $this->active = $active;
+        $this->reward = $reward;
     }
 }

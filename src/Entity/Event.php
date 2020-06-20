@@ -23,18 +23,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\HasLifecycleCallbacks
  * @ApiResource
  */
-class Product extends BaseEntity
+class Event extends BaseEntity
 {
     use IdTrait;
     use TimeTrait;
-
-    const CATEGORY_FRUIT_VEGETABLES = 1;
-    const CATEGORY_DAIRY_PRODUCTS_EGGS = 2;
-    const CATEGORY_BREAD_BACKED_GOODS = 3;
-    const CATEGORY_INVENTORIES = 4;
-    const CATEGORY_FROZEN_FOOD_READY_MADE_MEALS = 5;
-    const CATEGORY_DRINKS = 6;
-    const CATEGORY_HOUSEHOLD = 7;
 
     /**
      * @var string
@@ -45,20 +37,12 @@ class Product extends BaseEntity
     private $name;
 
     /**
-     * @var int
-     * @Assert\Range(min=1, max=7)
-     *
-     * @ORM\Column(type="integer")
-     */
-    private $category;
-
-    /**
-     * @var bool
+     * @var \DateTime
      * @Assert\NotBlank
      *
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="datetime")
      */
-    private $active;
+    private $startAt;
 
     public function getName(): string
     {
@@ -70,23 +54,13 @@ class Product extends BaseEntity
         $this->name = $name;
     }
 
-    public function getCategory(): int
+    public function getStartAt(): \DateTime
     {
-        return $this->category;
+        return $this->startAt;
     }
 
-    public function setCategory(int $category): void
+    public function setStartAt(\DateTime $startAt): void
     {
-        $this->category = $category;
-    }
-
-    public function isActive(): bool
-    {
-        return $this->active;
-    }
-
-    public function setActive(bool $active): void
-    {
-        $this->active = $active;
+        $this->startAt = $startAt;
     }
 }

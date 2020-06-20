@@ -23,18 +23,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\HasLifecycleCallbacks
  * @ApiResource
  */
-class Product extends BaseEntity
+class User extends BaseEntity
 {
     use IdTrait;
     use TimeTrait;
-
-    const CATEGORY_FRUIT_VEGETABLES = 1;
-    const CATEGORY_DAIRY_PRODUCTS_EGGS = 2;
-    const CATEGORY_BREAD_BACKED_GOODS = 3;
-    const CATEGORY_INVENTORIES = 4;
-    const CATEGORY_FROZEN_FOOD_READY_MADE_MEALS = 5;
-    const CATEGORY_DRINKS = 6;
-    const CATEGORY_HOUSEHOLD = 7;
 
     /**
      * @var string
@@ -46,19 +38,19 @@ class Product extends BaseEntity
 
     /**
      * @var int
-     * @Assert\Range(min=1, max=7)
+     * @Assert\Range(min=1000, max=99999999)
      *
      * @ORM\Column(type="integer")
      */
-    private $category;
+    private $pin;
 
     /**
-     * @var bool
-     * @Assert\NotBlank
+     * @var int
+     * @Assert\Range(min=0, max=200000)
      *
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="integer")
      */
-    private $active;
+    private $karma;
 
     public function getName(): string
     {
@@ -70,23 +62,23 @@ class Product extends BaseEntity
         $this->name = $name;
     }
 
-    public function getCategory(): int
+    public function getPin(): int
     {
-        return $this->category;
+        return $this->pin;
     }
 
-    public function setCategory(int $category): void
+    public function setPin(int $pin): void
     {
-        $this->category = $category;
+        $this->pin = $pin;
     }
 
-    public function isActive(): bool
+    public function getKarma(): int
     {
-        return $this->active;
+        return $this->karma;
     }
 
-    public function setActive(bool $active): void
+    public function setKarma(int $karma): void
     {
-        $this->active = $active;
+        $this->karma = $karma;
     }
 }
