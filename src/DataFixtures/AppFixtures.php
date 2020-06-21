@@ -4,6 +4,9 @@ namespace App\DataFixtures;
 
 use App\Entity\Event;
 use App\Entity\Product;
+use App\Entity\Question;
+use App\Entity\Setting;
+use App\Entity\Task;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -11,10 +14,30 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        $this->loadProducts($manager);
         $this->loadEvents($manager);
+        $this->loadProducts($manager);
+        $this->loadQuestions($manager);
+        $this->loadSetting($manager);
+        $this->loadTask($manager);
 
         $manager->flush();
+    }
+
+    private function loadEvents(ObjectManager $manager)
+    {
+        $events = [
+            'Pasta Fun' => new \DateTime('today + 1 day'),
+            'Safe & Clean' => new \DateTime('today + 7 day'),
+            'Birthday' => new \DateTime('today + 18 day'),
+        ];
+
+        foreach ($events as $name => $date) {
+            $event = new Event();
+            $event->setName($name);
+            $event->setStartAt($date);
+
+            $manager->persist($event);
+        }
     }
 
     private function loadProducts(ObjectManager $manager)
@@ -49,18 +72,51 @@ class AppFixtures extends Fixture
         }
     }
 
-    private function loadEvents(ObjectManager $manager)
+    private function loadQuestions(ObjectManager $manager)
     {
         $events = [
-            'Pasta Fun' => new \DateTime('today + 1 day'),
-            'Safe & Clean' => new \DateTime('today + 7 day'),
-            'Birthday' => new \DateTime('today + 18 day'),
+            'Lunch?' => Question::REPETITION_DAILY,
+            'Dinner?' => Question::REPETITION_DAILY,
+            'Hotel?' => Question::REPETITION_NONE,
         ];
 
-        foreach ($events as $name => $date) {
-            $event = new Event();
+        foreach ($events as $name => $repetition) {
+            $event = new Question();
+            $event->setText($name);
+            $event->setRepetition($repetition);
+
+            $manager->persist($event);
+        }
+    }
+
+    private function loadSetting(ObjectManager $manager)
+    {
+        $events = [
+            Setting::KEY_DEPARTURE => 'Waserstrasse',
+        ];
+
+        foreach ($events as $key => $value) {
+            $event = new Setting();
+            $event->setKey($key);
+            $event->setValue($value);
+
+            $manager->persist($event);
+        }
+    }
+
+    private function loadTask(ObjectManager $manager)
+    {
+        $events = [
+            'Clean the kitchen' => 7,
+            'Mop the floor' => 14,
+            'Vacuum' => 7,
+        ];
+
+        foreach ($events as $name => $intervalInDays) {
+            $event = new Task();
             $event->setName($name);
-            $event->setStartAt($date);
+            $event->setIntervalInDays($intervalInDays);
+            $event->setReward(strlen($name));
 
             $manager->persist($event);
         }

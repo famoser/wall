@@ -53,12 +53,12 @@ class Task extends BaseEntity
     private $reward;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      * @Assert\NotBlank
      *
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $lastExecutionAt;
+    private $lastExecutionAt = null;
 
     public function getName(): string
     {
@@ -88,5 +88,15 @@ class Task extends BaseEntity
     public function setReward(int $reward): void
     {
         $this->reward = $reward;
+    }
+
+    public function getLastExecutionAt(): ?\DateTime
+    {
+        return $this->lastExecutionAt;
+    }
+
+    public function setLastExecutionAt(?\DateTime $lastExecutionAt): void
+    {
+        $this->lastExecutionAt = $lastExecutionAt;
     }
 }

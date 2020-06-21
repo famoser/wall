@@ -28,6 +28,8 @@ class Setting extends BaseEntity
     use IdTrait;
     use TimeTrait;
 
+    const KEY_DEPARTURE = 'departure';
+
     /**
      * @var string
      * @Assert\NotBlank

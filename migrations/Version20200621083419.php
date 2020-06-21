@@ -10,11 +10,11 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200620174913 extends AbstractMigration
+final class Version20200621083419 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'create event, question, setting, task and user table';
     }
 
     public function up(Schema $schema): void
@@ -23,11 +23,11 @@ final class Version20200620174913 extends AbstractMigration
         $this->addSql('CREATE TABLE event (id CHAR(36) NOT NULL --(DC2Type:guid)
         , name CLOB NOT NULL, start_at DATETIME NOT NULL, created_at DATETIME NOT NULL, last_changed_at DATETIME NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE question (id CHAR(36) NOT NULL --(DC2Type:guid)
-        , text CLOB NOT NULL, repetition DATETIME NOT NULL, created_at DATETIME NOT NULL, last_changed_at DATETIME NOT NULL, PRIMARY KEY(id))');
+        , text CLOB NOT NULL, repetition INTEGER NOT NULL, created_at DATETIME NOT NULL, last_changed_at DATETIME NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE setting (id CHAR(36) NOT NULL --(DC2Type:guid)
         , "key" CLOB NOT NULL, value CLOB NOT NULL, created_at DATETIME NOT NULL, last_changed_at DATETIME NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE task (id CHAR(36) NOT NULL --(DC2Type:guid)
-        , name CLOB NOT NULL, interval_in_days INTEGER NOT NULL, reward INTEGER NOT NULL, last_execution_at DATETIME NOT NULL, created_at DATETIME NOT NULL, last_changed_at DATETIME NOT NULL, PRIMARY KEY(id))');
+        , name CLOB NOT NULL, interval_in_days INTEGER NOT NULL, reward INTEGER NOT NULL, last_execution_at DATETIME DEFAULT NULL, created_at DATETIME NOT NULL, last_changed_at DATETIME NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE user (id CHAR(36) NOT NULL --(DC2Type:guid)
         , name CLOB NOT NULL, pin INTEGER NOT NULL, karma INTEGER NOT NULL, created_at DATETIME NOT NULL, last_changed_at DATETIME NOT NULL, PRIMARY KEY(id))');
         $this->addSql('ALTER TABLE product ADD COLUMN active BOOLEAN NOT NULL');

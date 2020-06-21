@@ -43,7 +43,7 @@ class Question extends BaseEntity
      * @var int
      * @Assert\Range(min=0, max=1)
      *
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="integer")
      */
     private $repetition;
 
