@@ -15,28 +15,23 @@ $(document).ready(function() {
     $('[data-toggle="popover"]').popover();
 });
 
-
+// setup vue
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 import { BootstrapVue } from 'bootstrap-vue';
+
 Vue.use(VueI18n);
 Vue.use(BootstrapVue);
+Vue.config.productionTip = false;
 
+// font awesome
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faEdit, faTrash, faPlus } from '@fortawesome/pro-light-svg-icons';
+import { faEdit, faTrash, faPlus, faSync } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-
-library.add(faEdit, faTrash, faPlus);
-
+library.add(faEdit, faTrash, faPlus, faSync);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
-Vue.config.productionTip = false;
-// components
-
-// app
-import App from './app.vue';
-
-// messages
+// translations
 const i18n = new VueI18n({
     locale: document.documentElement.lang.substr(0, 2),
     messages: {
@@ -44,6 +39,8 @@ const i18n = new VueI18n({
     }
 });
 
+// start
+import App from './app.vue';
 new Vue({
     i18n,
     el: '#app',
