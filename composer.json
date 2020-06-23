@@ -71,6 +71,7 @@
         "configure-environment": [
             "touch .env.local"
         ],
+        "generate-openapi": "php bin/console api:openapi:export --spec-version=3 --yaml > openapi.yaml",
         "pre-install-cmd": "@configure-environment",
         "post-install-cmd": [
             "@auto-scripts",
