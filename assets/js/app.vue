@@ -16,8 +16,13 @@
 
 <script>
     import moment from "moment";
+    import axios from "axios";
     import Spinner from "./components/Spinner"
     import Accounts from "./components/Accounts"
+
+    import Noty from 'noty';
+
+
 
     const lang = document.documentElement.lang.substr(0, 2);
     moment.locale(lang);
@@ -27,14 +32,41 @@
             return {
                 loaded: false,
                 activeUser: null,
-                users: [{id: 12, name: "Cédric", karma: 200}, {id: 13, name: "Florian", karma: 12}, {id: 14, name: "Xenia", karma: 213}]
+                users: [{id: 12, name: "Cédric", karma: 200}, {id: 13, name: "Florian", karma: 12}, {
+                    id: 14,
+                    name: "Xenia",
+                    me: false,
+                    karma: 213
+                }]
             }
         },
         components: {
             Spinner,
             Accounts
         },
-        methods: {}
+        methods: {},
+        mounted() {
+            axios.interceptors.response.use(
+                response => {
+                    return response.data;
+                },
+                error => {
+                    new Noty({
+                        text: this.$t("messages.danger.unrecoverable") + " (" + error.response.data.message + ")",
+                    }).show();
+
+                    console.log("request failed");
+                    console.log(error.response.data);
+                    return Promise.reject(error);
+                }
+            );
+
+            axios.get("/api/configuration").then((response) => {
+                this.constructionSite = response.data.constructionSite;
+                console.log(this.constructionSite);
+                this.constructionSiteId = this.constructionSite.id;
+            });
+        }
     }
 </script>
 

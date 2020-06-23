@@ -1,6 +1,9 @@
 @import "~bootstrap/scss/bootstrap.scss";
 @import '~bootstrap-vue/src/index.scss';
 
+@import "~noty/src/noty.scss";
+@import "~noty/src/themes/mint.scss";
+
 body {
     background-color: lightgray;
 }
