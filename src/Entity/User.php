@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks
- * @ApiResource(collectionOperations={"GET", "POST"}, itemOperations={"GET", "DELETE"})
+ * @ApiResource()
  */
 class User extends BaseEntity
 {
@@ -50,7 +50,7 @@ class User extends BaseEntity
      *
      * @ORM\Column(type="integer")
      */
-    private $karma;
+    private $karma = 0;
 
     public function getName(): string
     {

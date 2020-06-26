@@ -5,7 +5,12 @@
                 <div class="card mt-1">
                     <div class="card-body">
                         <spinner :spin="users === null">
-                            <accounts :users="users" @select-user="selectUser"></accounts>
+                            <accounts :users="users"
+                                      @select-user="selectUser"
+                                      @add-user="addUser"
+                                      @patch-user="patchUser"
+                                      @delete-user="deleteUser"
+                            ></accounts>
                         </spinner>
                     </div>
                 </div>
@@ -70,6 +75,24 @@
         methods: {
             selectUser: function (user) {
                 this.selectedUser = user;
+            },
+            addUser: function (user) {
+                axios.post("/api/users", user).then((response) => {
+                    Object.assign(user, response.data);
+                    this.users.push(user);
+                });
+            },
+            patchUser: function (id, user) {
+                axios.patch("/api/users/" + id, user, axiosPatchConfig).then((response) => {
+                    Object.assign(user, response.data);
+                });
+            },
+            deleteUser: function (id) {
+                axios.delete("/api/users/" + id).then(() => {
+                    let product = this.users.find(p => p.id === id);
+                    let index = this.users.indexOf(product);
+                    this.$delete(this.users, index)
+                });
             },
             addProduct: function (product) {
                 axios.post("/api/products", product).then((response) => {

@@ -97,7 +97,7 @@
         },
         data: function () {
             return {
-                selected: defaultProduct,
+                selected: Object.assign({}, defaultProduct),
                 mode: 'view'
             }
         },
@@ -141,7 +141,7 @@
                 this.$emit("delete-product", this.selected.id);
             },
             add: function () {
-                this.selected = defaultProduct
+                this.selected = Object.assign({}, defaultProduct)
 
                 this.$bvModal.show("modal-product-edit");
             },

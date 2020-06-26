@@ -30,6 +30,7 @@
     "danger": {
       "request_failed": "the server request failed",
       "pin_wrong": "PIN is wrong",
+      "must_set_pin": "you need to set a PIN",
       "confirm_remove": "do you really want to remove this?"
     }
   }

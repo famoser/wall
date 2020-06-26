@@ -1,11 +1,12 @@
 <template>
     <div>
-        <div class="btn-group btn-group-toggle">
+        <div class="btn-group btn-group-toggle" v-if="mode === 'view'">
             <label class="btn btn-outline-secondary"
                    v-for="user in users"
                    :id="user.id"
-                   :class="{'active': selected === user }">
-                <input type="checkbox" autocomplete="off" :true-value="user" :false-value="null" v-model="selected">
+                   :class="{'active': authenticated === user }">
+                <input type="checkbox" autocomplete="off" :true-value="user" :false-value="null"
+                       v-model="authenticated" @change="userClicked">
                 {{user.name}}
                 <span class="badge badge-pill"
                       :class="{'badge-light': selected === user, 'badge-secondary': selected !== user}">
@@ -14,23 +15,71 @@
             </label>
         </div>
 
+        <div v-if="mode === 'edit'" class="d-inline mr-2">
+            <div class="btn-group">
+                <button class="btn" @click="edit">
+                    <font-awesome-icon class="text-warning" :icon="['fal', 'pencil']"></font-awesome-icon>
+                </button>
+                <button class="btn" @click="remove">
+                    <font-awesome-icon class="text-danger" :icon="['fal', 'trash']"></font-awesome-icon>
+                </button>
+            </div>
+            {{authenticated.name}}
+        </div>
+
+        <div class="btn-group-toggle d-inline" v-if="authorized">
+            <label class="btn btn-outline-secondary"
+                   :class="{'active': mode === 'edit' }">
+                <input type="checkbox" autocomplete="off" :true-value="'edit'" :false-value="'view'" v-model="mode">
+                <font-awesome-icon :icon="['fal', 'pencil']"></font-awesome-icon>
+            </label>
+        </div>
+
+        <button class="btn btn-outline-secondary" @click="add" v-if="mode === 'edit' || this.users.length === 0">
+            <font-awesome-icon :icon="['fal', 'plus']"></font-awesome-icon>
+        </button>
+
         <button class="btn btn-outline-secondary float-md-right" @click="reload">
             <font-awesome-icon :icon="['fal', 'sync']"></font-awesome-icon>
         </button>
 
         <b-modal id="modal-authentication" v-model="modelAuthenticationShow" :centered="true" hide-header
-                 @cancel="selected = null"
+                 @cancel="authenticated = null"
                  @ok="pinEntered">
             <div class="form-group">
                 <input ref="password" type="password" class="form-control form-control-lg" id="pin"
                        :placeholder="$t('entity.user.pin')" autofocus v-model="pin">
             </div>
         </b-modal>
+
+        <b-modal id="modal-user-edit" :centered="true" hide-header
+                 @ok="confirmEdit">
+            <div class="form-group">
+                <input type="text" class="form-control form-control-lg" id="name"
+                       :placeholder="$t('entity.user.name')"
+                       v-model="selected.name">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control form-control-lg" id="pin-edit"
+                       :placeholder="$t('entity.user.pin')"
+                       v-model="newPin">
+            </div>
+        </b-modal>
+
+        <b-modal id="modal-user-remove" :centered="true" hide-header
+                 @ok="confirmRemove">
+            {{ $t("messages.danger.confirm_remove") }}
+        </b-modal>
     </div>
 </template>
 
 <script>
     import Noty from 'noty';
+
+    const defaultUser = {
+        "name": "",
+        "pin": ""
+    }
 
     export default {
         props: {
@@ -41,16 +90,35 @@
         },
         data: function () {
             return {
-                selected: this.users.find(u => u.pin === parseInt(localStorage.getItem('accounts.pin'))),
+                authenticated: this.users.find(u => u.pin === parseInt(localStorage.getItem('accounts.pin'))),
+                selected: Object.assign({}, defaultUser),
                 pin: null,
-                modelAuthenticationShow: false
+                mode: 'view',
+                modelAuthenticationShow: false,
+                newPin: null
             }
         },
         methods: {
+            reload: function () {
+                window.location.reload();
+            },
+            logout: function () {
+                localStorage.setItem('accounts.pin', null);
+                this.authenticated = null;
+                this.$emit('select-user', null);
+            },
+            login: function (user, pin) {
+                localStorage.setItem('accounts.pin', pin);
+                this.authenticated = user;
+                this.$emit('select-user', this.authenticated);
+            },
+            pseudoRandomizePIN: function (pin) { // segurity
+                return Math.floor(Math.sin(pin) * 10000);
+            },
             pinEntered: function () {
-                let randomized = Math.floor(Math.sin(this.pin) * 10000); // segurity
-                if (this.selected.pin !== randomized) {
-                    this.selected = null;
+                let randomized = this.pseudoRandomizePIN(this.pin)
+                if (this.authenticated.pin !== randomized) {
+                    this.authenticated = null;
 
                     new Noty({
                         text: this.$t("messages.danger.pin_wrong"),
@@ -58,13 +126,59 @@
                         type: 'error'
                     }).show();
                 } else {
-                    localStorage.setItem('accounts.pin', randomized.toString());
+                    this.login(this.authenticated, randomized);
                 }
                 this.pin = null;
-                this.$emit('select-user', this.selected);
             },
-            reload: function () {
-                window.location.reload();
+            confirmEdit: function () {
+                const update = {
+                    "name": this.selected.name
+                }
+
+                if (!this.newPin && !this.selected.persistedInDatabase) {
+                    new Noty({
+                        text: this.$t("messages.danger.must_set_pin"),
+                        theme: 'bootstrap-v4',
+                        type: 'error'
+                    }).show();
+                    return;
+                }
+
+                if (this.newPin) {
+                    update.pin = this.pseudoRandomizePIN(this.newPin);
+                    this.login(this.selected, update.pin);
+                    this.newPin = null;
+                }
+
+                if (this.selected.persistedInDatabase) {
+                    this.$emit("patch-user", this.selected.id, update)
+                } else {
+                    this.$emit("add-user", update);
+                }
+            },
+            confirmRemove: function () {
+                this.$emit("delete-user", this.authenticated.id);
+                this.logout();
+                this.mode = 'view'
+            },
+            add: function () {
+                this.selected = Object.assign({}, defaultUser);
+                this.$bvModal.show("modal-user-edit");
+            },
+            edit: function () {
+                this.selected = this.authenticated;
+                this.$bvModal.show("modal-user-edit");
+            },
+            remove: function () {
+                this.selected = this.authenticated;
+                this.$bvModal.show("modal-user-remove");
+            },
+            userClicked: function () {
+                if (this.authenticated !== null) {
+                    this.$bvModal.show("modal-authentication");
+                } else {
+                    this.logout();
+                }
             }
         },
         watch: {
@@ -74,21 +188,18 @@
                         this.$refs.password.focus();
                     }, 100);
                 }
-            },
-            selected: function (value) {
-                if (value !== null) {
-                    this.$bvModal.show("modal-authentication");
-                } else {
-                    this.$emit('select-user', null);
-                    localStorage.setItem('accounts.pin', null);
-                }
+            }
+        },
+        computed: {
+            authorized: function () {
+                return this.authenticated != null;
             }
         },
         mounted() {
-            if (this.selected === null) {
+            if (this.authenticated === null) {
                 localStorage.setItem('accounts.pin', null);
             } else {
-                this.$emit('select-user', this.selected);
+                this.$emit('select-user', this.authenticated);
             }
         }
     }
