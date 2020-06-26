@@ -1,21 +1,31 @@
 <template>
     <div>
         <div class="btn-group btn-group-toggle">
-            <label class="btn btn-secondary"
+            <label class="btn btn-outline-secondary"
                    v-for="user in users"
                    :id="user.id"
                    :class="{'active': selected === user }">
-                <input type="checkbox" autocomplete="off" :true-value="user" :false-value="null" v-model="selected">{{user.name}}
+                <input type="checkbox" autocomplete="off" :true-value="user" :false-value="null" v-model="selected">
+                {{user.name}}
+                <span class="badge badge-pill badge-secondary">{{user.karma}}</span>
             </label>
         </div>
 
         <button class="btn btn-outline-secondary float-md-right">
             <font-awesome-icon :icon="['fal', 'sync']"></font-awesome-icon>
         </button>
+
+        <b-modal id="modal-authentication" :centered="true" title="BootstrapVue" hide-header
+                 @cancel="selected = null"
+                 @ok="pinEntered">
+            <input type="password" class="form-control form-control-lg" id="pin" placeholder="PIN" v-model="pin">
+        </b-modal>
     </div>
 </template>
 
 <script>
+    import Noty from 'noty';
+
     export default {
         props: {
             users: {
@@ -25,17 +35,34 @@
         },
         data: function () {
             return {
-                selected: null
+                selected: null,
+                pin: null
+            }
+        },
+        methods: {
+            pinEntered: function () {
+                let randomized = Math.floor(Math.sin(this.pin) * 10000);
+                console.log(randomized)
+                if (this.selected.pin !== randomized) {
+                    this.selected = null;
+
+                    new Noty({
+                        text: this.$t("messages.danger.pin_wrong"),
+                        theme: 'bootstrap-v4',
+                        type: 'error'
+                    }).show();
+                }
+                this.pin = null;
+                this.$emit('selected-user', this.selected);
             }
         },
         watch: {
             selected: function (value) {
-                if (value === null) {
-                    return;
+                if (value !== null) {
+                    this.$bvModal.show("modal-authentication");
+                } else {
+                    this.$emit('selected-user', null);
                 }
-
-                // authenticate
-
             }
         }
     }

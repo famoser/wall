@@ -103,7 +103,8 @@ class AppFixtures extends Fixture
             $user = new User();
             $user->setName($name);
             $user->setKarma($karma);
-            $user->setPin($karma);
+            $pin = floor(sin($karma) * 10000);
+            $user->setPin($pin);
 
             $manager->persist($user);
         }

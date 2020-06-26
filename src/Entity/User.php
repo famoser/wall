@@ -38,7 +38,7 @@ class User extends BaseEntity
 
     /**
      * @var int
-     * @Assert\Range(min=1000, max=99999999)
+     * @Assert\NotBlank
      *
      * @ORM\Column(type="integer")
      */

@@ -18,7 +18,8 @@
   },
   "messages": {
     "danger": {
-      "request_failed": "the server request failed"
+      "request_failed": "the server request failed",
+      "pin_wrong": "PIN is wrong"
     }
   }
 }
