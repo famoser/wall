@@ -1,15 +1,15 @@
 <template>
     <div>
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="btn btn-secondary" v-for="user in users" :id="user.id" v-model="selected"
-                   :class="{'active': activeUser !== null && activeUser === user }"
-                   >
-                <input type="radio" name="options" id="option1" autocomplete="off">
-                {{ user.name }}
-                <span class="badge badge-pill badge-info">{{user.karma}}</span>
+        <div class="btn-group btn-group-toggle">
+            <label class="btn btn-secondary"
+                   v-for="user in users"
+                   :id="user.id"
+                   :class="{'active': selected === user }">
+                <input type="checkbox" autocomplete="off" :true-value="user" :false-value="null" v-model="selected">{{user.name}}
             </label>
         </div>
-        <button class="btn btn-outline-secondary">
+
+        <button class="btn btn-outline-secondary float-md-right">
             <font-awesome-icon :icon="['fal', 'sync']"></font-awesome-icon>
         </button>
     </div>
@@ -21,19 +21,22 @@
             users: {
                 type: Array,
                 required: true
-            },
-            activeUser: {
-                type: Object
             }
         },
         data: function () {
             return {
                 selected: null
             }
+        },
+        watch: {
+            selected: function (value) {
+                if (value === null) {
+                    return;
+                }
+
+                // authenticate
+
+            }
         }
     }
 </script>
-
-<style scoped>
-
-</style>

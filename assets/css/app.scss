@@ -1,13 +1,18 @@
+$grid-gutter-width: 10px;
+$border-radius: .10rem;
+$card-spacer-y: .25rem;
+$card-spacer-x: .5rem;
 @import "~bootstrap/scss/bootstrap.scss";
+
 @import '~bootstrap-vue/src/index.scss';
 
 @import "~noty/src/noty.scss";
 @import "~noty/src/themes/bootstrap-v4.scss";
 
 body {
-    background-color: lightgray;
+  background-color: lightgray;
 }
 
 html, body {
-    height: 100%;
+  height: 100%;
 }

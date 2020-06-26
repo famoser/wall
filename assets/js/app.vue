@@ -1,13 +1,26 @@
 <template>
     <div class="container-fluid h-100">
         <div class="row h-100">
-            <div class="col-md-3 h-100 bg-secondary">
-                <accounts class="mt-3" :users="users" :active-user="activeUser"></accounts>
+            <div class="col-lg-3 h-100 d-flex flex-column">
+                <div class="card mt-1">
+                    <div class="card-body">
+                        <spinner :spin="users === null">
+                            <accounts :users="users" @user-changed="activeUser = props"></accounts>
+                        </spinner>
+                    </div>
+                </div>
+                <div class="card mt-1 mb-1 flex-lg-grow-1">
+                    <div class="card-body">
+                        <spinner :spin="products === null">
+                            <products :products="products" :active-user="activeUser"></products>
+                        </spinner>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6 h-100 bg-success">
+            <div class="col-lg-6 h-100 bg-success">
 
             </div>
-            <div class="col-md-3 h-100 bg-warning">
+            <div class="col-lg-3 h-100 bg-warning">
 
             </div>
         </div>
@@ -19,6 +32,7 @@
     import axios from "axios";
     import Spinner from "./components/Spinner"
     import Accounts from "./components/Accounts"
+    import Products from "./components/Products"
 
     import Noty from 'noty';
 
@@ -28,25 +42,25 @@
     export default {
         data: function () {
             return {
-                loaded: false,
-                activeUser: null,
-                users: [{id: 12, name: "Cédric", karma: 200}, {id: 13, name: "Florian", karma: 12}, {
-                    id: 14,
-                    name: "Xenia",
-                    me: false,
-                    karma: 213
-                }]
+                products: null,
+                users: null,
+                events: null,
+                questions: null,
+                tasks: null,
+                settings: null,
+                activeUser: null
             }
         },
         components: {
             Spinner,
-            Accounts
+            Accounts,
+            Products
         },
         methods: {},
         mounted() {
             axios.interceptors.response.use(
                 response => {
-                    return response.data;
+                    return response;
                 },
                 error => {
                     new Noty({
@@ -61,10 +75,12 @@
                 }
             );
 
-            axios.get("/api/configuration").then((response) => {
-                this.constructionSite = response.data.constructionSite;
-                console.log(this.constructionSite);
-                this.constructionSiteId = this.constructionSite.id;
+            axios.get("/api/products").then((response) => {
+                this.products = response.data["hydra:member"];
+            });
+
+            axios.get("/api/users").then((response) => {
+                this.users = response.data["hydra:member"];
             });
         }
     }

@@ -5,6 +5,17 @@
   "buttons": {
     "save": "Save"
   },
+  "products": {
+    "categories": {
+      "fruit_vegetables": "Fruits & Vegetables",
+      "dairy_products_eggs": "Dairy Products & Eggs",
+      "bread_backed_goods": "Bread & Backed Goods",
+      "inventories": "Inventories",
+      "frozen_food_ready_made_meals": "Frozen Food & Ready Made Meals",
+      "drinks": "Drinks",
+      "household": "Household"
+    }
+  },
   "messages": {
     "danger": {
       "request_failed": "the server request failed"

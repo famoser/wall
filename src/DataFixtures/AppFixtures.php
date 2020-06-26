@@ -7,6 +7,7 @@ use App\Entity\Product;
 use App\Entity\Question;
 use App\Entity\Setting;
 use App\Entity\Task;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -19,6 +20,7 @@ class AppFixtures extends Fixture
         $this->loadQuestions($manager);
         $this->loadSetting($manager);
         $this->loadTask($manager);
+        $this->loadUsers($manager);
 
         $manager->flush();
     }
@@ -86,6 +88,24 @@ class AppFixtures extends Fixture
             $event->setRepetition($repetition);
 
             $manager->persist($event);
+        }
+    }
+
+    private function loadUsers(ObjectManager $manager)
+    {
+        $events = [
+            'Florian' => 300,
+            'Cédric' => 101,
+            'Xenia' => 200,
+        ];
+
+        foreach ($events as $name => $karma) {
+            $user = new User();
+            $user->setName($name);
+            $user->setKarma($karma);
+            $user->setPin($karma);
+
+            $manager->persist($user);
         }
     }
 
