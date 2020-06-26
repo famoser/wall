@@ -5,8 +5,7 @@
                    v-for="user in users"
                    :id="user.id"
                    :class="{'active': authenticated === user }">
-                <input type="checkbox" autocomplete="off" :true-value="user" :false-value="null"
-                       v-model="authenticated" @change="userClicked">
+                <input type="checkbox" autocomplete="off" :true-value="user" :false-value="null" @change="authenticateUser(user)">
                 {{user.name}}
                 <span class="badge badge-pill"
                       :class="{'badge-light': selected === user, 'badge-secondary': selected !== user}">
@@ -90,7 +89,7 @@
         },
         data: function () {
             return {
-                authenticated: this.users.find(u => u.pin === parseInt(localStorage.getItem('accounts.pin'))),
+                authenticated: null,
                 selected: Object.assign({}, defaultUser),
                 pin: null,
                 mode: 'view',
@@ -105,20 +104,19 @@
             logout: function () {
                 localStorage.setItem('accounts.pin', null);
                 this.authenticated = null;
-                this.$emit('select-user', null);
+                this.$emit('select-user', null, null);
             },
             login: function (user, pin) {
                 localStorage.setItem('accounts.pin', pin);
                 this.authenticated = user;
-                this.$emit('select-user', this.authenticated);
+                this.$emit('select-user', this.authenticated, pin);
             },
             pseudoRandomizePIN: function (pin) { // segurity
                 return Math.floor(Math.sin(pin) * 10000);
             },
             pinEntered: function () {
                 let randomized = this.pseudoRandomizePIN(this.pin)
-                if (this.authenticated.pin !== randomized) {
-                    this.authenticated = null;
+                if (this.selected.pin !== randomized) {
 
                     new Noty({
                         text: this.$t("messages.danger.pin_wrong"),
@@ -126,7 +124,7 @@
                         type: 'error'
                     }).show();
                 } else {
-                    this.login(this.authenticated, randomized);
+                    this.login(this.selected, this.pin);
                 }
                 this.pin = null;
             },
@@ -173,8 +171,9 @@
                 this.selected = this.authenticated;
                 this.$bvModal.show("modal-user-remove");
             },
-            userClicked: function () {
-                if (this.authenticated !== null) {
+            authenticateUser: function (user) {
+                if (user !== null) {
+                    this.selected = user;
                     this.$bvModal.show("modal-authentication");
                 } else {
                     this.logout();
@@ -196,6 +195,9 @@
             }
         },
         mounted() {
+            // attempt login
+            const pin = parseInt(localStorage.getItem('accounts.pin'));
+            this.authenticated = this.users.find(u => u.pin === this.pseudoRandomizePIN(pin))
             if (this.authenticated === null) {
                 localStorage.setItem('accounts.pin', null);
             } else {

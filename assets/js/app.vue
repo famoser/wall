@@ -64,7 +64,8 @@
                 questions: null,
                 tasks: null,
                 settings: null,
-                selectedUser: null
+                selectedUser: null,
+                secret: null
             }
         },
         components: {
@@ -73,8 +74,9 @@
             Products
         },
         methods: {
-            selectUser: function (user) {
+            selectUser: function (user, secret) {
                 this.selectedUser = user;
+                this.secret = secret
             },
             addUser: function (user) {
                 axios.post("/api/users", user).then((response) => {
