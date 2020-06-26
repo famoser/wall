@@ -49,12 +49,6 @@
     const lang = document.documentElement.lang.substr(0, 2);
     moment.locale(lang);
 
-    const axiosPatchConfig = {
-        headers: {
-            'Content-Type': 'application/merge-patch+json'
-        }
-    }
-
     export default {
         data: function () {
             return {
@@ -85,7 +79,7 @@
                 });
             },
             patchUser: function (id, user) {
-                axios.patch("/api/users/" + id, user, axiosPatchConfig).then((response) => {
+                axios.patch("/api/users/" + id, user).then((response) => {
                     Object.assign(user, response.data);
                 });
             },
@@ -103,7 +97,7 @@
                 });
             },
             patchProduct: function (id, product) {
-                axios.patch("/api/products/" + id, product, axiosPatchConfig).then((response) => {
+                axios.patch("/api/products/" + id, product).then((response) => {
                     Object.assign(product, response.data);
                 });
             },
