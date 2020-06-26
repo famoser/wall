@@ -29,7 +29,8 @@
   "messages": {
     "danger": {
       "request_failed": "the server request failed",
-      "pin_wrong": "PIN is wrong"
+      "pin_wrong": "PIN is wrong",
+      "confirm_remove": "do you really want to remove this?"
     }
   }
 }

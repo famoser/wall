@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
+ * @ApiResource(collectionOperations={"GET", "POST"}, itemOperations={"GET", "DELETE"})
  */
 class User extends BaseEntity
 {

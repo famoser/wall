@@ -26,9 +26,9 @@ Vue.config.productionTip = false;
 
 // font awesome
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faEdit, faTrash, faPlus, faSync } from '@fortawesome/pro-light-svg-icons';
+import { faEdit, faTrash, faPlus, faSync, faPencil, faShoppingBag } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-library.add(faEdit, faTrash, faPlus, faSync);
+library.add(faEdit, faTrash, faPlus, faPencil, faShoppingBag, faSync);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 // translations

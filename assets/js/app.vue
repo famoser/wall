@@ -5,7 +5,7 @@
                 <div class="card mt-1">
                     <div class="card-body">
                         <spinner :spin="users === null">
-                            <accounts :users="users" @user-changed="activeUser = props"></accounts>
+                            <accounts :users="users" @select-user="selectUser"></accounts>
                         </spinner>
                     </div>
                 </div>
@@ -13,9 +13,10 @@
                     <div class="card-body">
                         <spinner :spin="products === null">
                             <products :products="products"
-                                      :active-user="activeUser"
+                                      :authorized="authorized"
                                       @add-product="addProduct"
-                                      @patch-product="patchProduct">
+                                      @patch-product="patchProduct"
+                                      @delete-product="deleteProduct">
                             </products>
                         </spinner>
                     </div>
@@ -58,7 +59,7 @@
                 questions: null,
                 tasks: null,
                 settings: null,
-                activeUser: null
+                selectedUser: null
             }
         },
         components: {
@@ -67,6 +68,9 @@
             Products
         },
         methods: {
+            selectUser: function (user) {
+                this.selectedUser = user;
+            },
             addProduct: function (product) {
                 axios.post("/api/products", product).then((response) => {
                     Object.assign(product, response.data);
@@ -77,6 +81,18 @@
                 axios.patch("/api/products/" + id, product, axiosPatchConfig).then((response) => {
                     Object.assign(product, response.data);
                 });
+            },
+            deleteProduct: function (id) {
+                axios.delete("/api/products/" + id).then(() => {
+                    let product = this.products.find(p => p.id === id);
+                    let index = this.products.indexOf(product);
+                    this.$delete(this.products, index)
+                });
+            }
+        },
+        computed: {
+            authorized: function () {
+                return this.selectedUser !== null;
             }
         },
         mounted() {
