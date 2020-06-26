@@ -16,6 +16,16 @@
       "household": "Household"
     }
   },
+  "entity": {
+    "user": {
+      "name": "Name",
+      "pin": "PIN"
+    },
+    "product": {
+      "name": "Name",
+      "category": "Category"
+    }
+  },
   "messages": {
     "danger": {
       "request_failed": "the server request failed",

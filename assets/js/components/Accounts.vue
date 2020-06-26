@@ -18,7 +18,9 @@
         <b-modal id="modal-authentication" :centered="true" hide-header
                  @cancel="selected = null"
                  @ok="pinEntered">
-            <input type="password" class="form-control form-control-lg" id="pin" placeholder="PIN" v-model="pin">
+            <div class="form-group">
+                <input type="password" class="form-control form-control-lg" id="pin" :placeholder="$t('entity.user.name')" v-model="pin">
+            </div>
         </b-modal>
     </div>
 </template>

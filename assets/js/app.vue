@@ -73,8 +73,8 @@
                     this.products.push(product);
                 });
             },
-            patchProduct: function (product) {
-                axios.patch("/api/products/" + product.id, product, axiosPatchConfig).then((response) => {
+            patchProduct: function (id, product) {
+                axios.patch("/api/products/" + id, product, axiosPatchConfig).then((response) => {
                     Object.assign(product, response.data);
                 });
             }

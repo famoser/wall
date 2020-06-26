@@ -16,13 +16,19 @@
         </template>
 
         <b-modal id="modal-product-edit" :centered="true" hide-header
-                 v-if="selected !== null"
                  @cancel="selected = null"
                  @ok="confirmEdit">
-            <input type="text" class="form-control form-control-lg" id="name" placeholder="name" v-model="selected.name">
-            <select class="form-control form-control-lg" v-model="selected.category">
-                <option v-for="index in 7" :value="index">{{ $t("products.categories." + categoryToTranslationId(index)) }}</option>
-            </select>
+            <div class="form-group">
+                <input type="text" class="form-control form-control-lg" id="name" :placeholder="$t('entity.product.name')"
+                       v-model="selected.name">
+            </div>
+            <div class="form-group">
+                <select class="form-control form-control-lg" v-model="selected.category">
+                    <option v-for="index in 7" :value="index">
+                        {{ $t("products.categories." + categoryToTranslationId(index)) }}
+                    </option>
+                </select>
+            </div>
         </b-modal>
     </div>
 </template>
@@ -77,7 +83,7 @@
                     "active": product.active,
                 }
                 if (product.persistedInDatabase) {
-                    this.$emit("patch-product", update)
+                    this.$emit("patch-product", product.id, update)
                 } else {
                     this.$emit("add-product", update);
                 }
