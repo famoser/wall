@@ -22,8 +22,6 @@
 
     import Noty from 'noty';
 
-
-
     const lang = document.documentElement.lang.substr(0, 2);
     moment.locale(lang);
 
@@ -52,7 +50,9 @@
                 },
                 error => {
                     new Noty({
-                        text: this.$t("messages.danger.unrecoverable") + " (" + error.response.data.message + ")",
+                        text: this.$t("messages.danger.request_failed") + " (" + error.response.data.status + ": " + error.response.data.detail + ")",
+                        theme: 'bootstrap-v4',
+                        type: 'error'
                     }).show();
 
                     console.log("request failed");

@@ -4,5 +4,10 @@
   },
   "buttons": {
     "save": "Save"
+  },
+  "messages": {
+    "danger": {
+      "request_failed": "the server request failed"
+    }
   }
 }

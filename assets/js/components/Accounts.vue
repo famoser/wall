@@ -2,8 +2,9 @@
     <div>
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <label class="btn btn-secondary" v-for="user in users" :id="user.id" v-model="selected"
-                   :class="{'active': activeUser === user }">
-                <input type="radio" name="options" id="option1" autocomplete="off" checked>
+                   :class="{'active': activeUser !== null && activeUser === user }"
+                   >
+                <input type="radio" name="options" id="option1" autocomplete="off">
                 {{ user.name }}
                 <span class="badge badge-pill badge-info">{{user.karma}}</span>
             </label>
