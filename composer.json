@@ -25,7 +25,7 @@
     "require-dev": {
         "brainmaestro/composer-git-hooks": "^2.8",
         "doctrine/doctrine-fixtures-bundle": "^3.3",
-        "famoser/agnes": "^2.0",
+        "famoser/agnes": "^2.0.4",
         "friendsofphp/php-cs-fixer": "^2.16",
         "sensiolabs/security-checker": "^6.0",
         "symfony/debug-pack": "^1.0",
