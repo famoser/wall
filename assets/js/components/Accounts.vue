@@ -172,7 +172,7 @@
                 this.$bvModal.show("modal-user-remove");
             },
             authenticateUser: function (user) {
-                if (user !== null) {
+                if (this.authenticated !== user) {
                     this.selected = user;
                     this.$bvModal.show("modal-authentication");
                 } else {
