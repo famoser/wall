@@ -11,11 +11,11 @@
             </label>
         </div>
 
-        <button class="btn btn-outline-secondary float-md-right">
+        <button class="btn btn-outline-secondary float-md-right" @click="reload">
             <font-awesome-icon :icon="['fal', 'sync']"></font-awesome-icon>
         </button>
 
-        <b-modal id="modal-authentication" :centered="true" title="BootstrapVue" hide-header
+        <b-modal id="modal-authentication" :centered="true" hide-header
                  @cancel="selected = null"
                  @ok="pinEntered">
             <input type="password" class="form-control form-control-lg" id="pin" placeholder="PIN" v-model="pin">
@@ -42,7 +42,6 @@
         methods: {
             pinEntered: function () {
                 let randomized = Math.floor(Math.sin(this.pin) * 10000);
-                console.log(randomized)
                 if (this.selected.pin !== randomized) {
                     this.selected = null;
 
@@ -54,6 +53,9 @@
                 }
                 this.pin = null;
                 this.$emit('selected-user', this.selected);
+            },
+            reload: function () {
+                window.location.reload();
             }
         },
         watch: {

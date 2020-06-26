@@ -1,27 +1,52 @@
 <template>
     <div>
+        <button class="btn btn-outline-secondary" @click="add">
+            <font-awesome-icon :icon="['fal', 'plus']"></font-awesome-icon>
+        </button>
         <template v-for="(productCategory, index) in productCategories">
             <p class="lead mb-0">{{ $t("products.categories." + productCategory.name) }}</p>
             <div v-for="product in productCategory.products" class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" :id="product.id">
+                <input type="checkbox" class="custom-control-input"
+                       v-model="product.active"
+                       @change="saveProduct(product)"
+                       :id="product.id">
                 <label class="custom-control-label" :for="product.id">{{product.name}}</label>
             </div>
             <div class="mb-4" v-if="index < productCategories.length - 1"></div>
         </template>
+
+        <b-modal id="modal-product-edit" :centered="true" hide-header
+                 v-if="selected !== null"
+                 @cancel="selected = null"
+                 @ok="confirmEdit">
+            <input type="text" class="form-control form-control-lg" id="name" placeholder="name" v-model="selected.name">
+            <select class="form-control form-control-lg" v-model="selected.category">
+                <option v-for="index in 7" :value="index">{{ $t("products.categories." + categoryToTranslationId(index)) }}</option>
+            </select>
+        </b-modal>
     </div>
 </template>
 
 <script>
     import Spinner from "./Spinner";
+
+    const defaultProduct = {
+        "name": "",
+        "category": 1,
+        "active": false
+    }
+
     export default {
         components: {Spinner},
         props: {
-            activeUser: {
-                type: Object
-            },
             products: {
                 type: Array,
                 required: true
+            }
+        },
+        data: function () {
+            return {
+                selected: defaultProduct
             }
         },
         methods: {
@@ -44,6 +69,27 @@
                     default:
                         return "other"
                 }
+            },
+            saveProduct: function (product) {
+                const update = {
+                    "name": product.name,
+                    "category": product.category,
+                    "active": product.active,
+                }
+                if (product.persistedInDatabase) {
+                    this.$emit("patch-product", update)
+                } else {
+                    this.$emit("add-product", update);
+                }
+            },
+            confirmEdit: function () {
+                this.saveProduct(this.selected);
+                this.selected = null;
+            },
+            add: function () {
+                this.selected = defaultProduct
+
+                this.$bvModal.show("modal-product-edit");
             }
         },
         computed: {

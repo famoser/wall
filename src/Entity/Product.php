@@ -54,7 +54,7 @@ class Product extends BaseEntity
 
     /**
      * @var bool
-     * @Assert\NotBlank
+     * @Assert\NotNull()
      *
      * @ORM\Column(type="boolean")
      */

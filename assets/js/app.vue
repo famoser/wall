@@ -9,10 +9,14 @@
                         </spinner>
                     </div>
                 </div>
-                <div class="card mt-1 mb-1 flex-lg-grow-1">
+                <div class="card mt-1 mb-1 flex-lg-grow-1 overflow-auto">
                     <div class="card-body">
                         <spinner :spin="products === null">
-                            <products :products="products" :active-user="activeUser"></products>
+                            <products :products="products"
+                                      :active-user="activeUser"
+                                      @add-product="addProduct"
+                                      @patch-product="patchProduct">
+                            </products>
                         </spinner>
                     </div>
                 </div>
@@ -25,7 +29,7 @@
             </div>
         </div>
     </div>
-</template>
+</template>W
 
 <script>
     import moment from "moment";
@@ -38,6 +42,12 @@
 
     const lang = document.documentElement.lang.substr(0, 2);
     moment.locale(lang);
+
+    const axiosPatchConfig = {
+        headers: {
+            'Content-Type': 'application/merge-patch+json'
+        }
+    }
 
     export default {
         data: function () {
@@ -56,7 +66,19 @@
             Accounts,
             Products
         },
-        methods: {},
+        methods: {
+            addProduct: function (product) {
+                axios.post("/api/products", product).then((response) => {
+                    Object.assign(product, response.data);
+                    this.products.push(product);
+                });
+            },
+            patchProduct: function (product) {
+                axios.patch("/api/products/" + product.id, product, axiosPatchConfig).then((response) => {
+                    Object.assign(product, response.data);
+                });
+            }
+        },
         mounted() {
             axios.interceptors.response.use(
                 response => {
