@@ -25,10 +25,13 @@ Vue.use(BootstrapVue);
 Vue.config.productionTip = false;
 
 // font awesome
-import { library } from '@fortawesome/fontawesome-svg-core';
+import { library, config } from '@fortawesome/fontawesome-svg-core';
+config.autoAddCss = false
+
 import { faEdit, faTrash, faPlus, faSync, faPencil, faShoppingBag } from '@fortawesome/pro-light-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 library.add(faEdit, faTrash, faPlus, faPencil, faShoppingBag, faSync);
+
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 // translations
