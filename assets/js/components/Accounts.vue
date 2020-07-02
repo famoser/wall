@@ -191,14 +191,14 @@
         },
         computed: {
             authorized: function () {
-                return this.authenticated != null;
+                return this.authenticated !== null;
             }
         },
         mounted() {
             // attempt login
             const pin = parseInt(localStorage.getItem('accounts.pin'));
             this.authenticated = this.users.find(u => u.pin === this.pseudoRandomizePIN(pin))
-            if (this.authenticated === null) {
+            if (!this.authenticated) {
                 localStorage.setItem('accounts.pin', null);
             } else {
                 this.$emit('select-user', this.authenticated);

@@ -1,4 +1,6 @@
 agnes:
+  version: 3
+  config_folder: '.deploy'
   build_target:
     connection:
       type: local
@@ -17,7 +19,7 @@ application:
       required: true
 
   scripts:
-    release:
+    build:
       - composer install --verbose --prefer-dist --no-interaction --no-dev --optimize-autoloader --no-scripts
       - yarn install
       - yarn run encore production
