@@ -32,6 +32,7 @@
                            v-model="product.active"
                            @change="save(product)"
                            :id="product.id"
+                           :key="product.id"
                            :disabled="!authorized"
                     >
                     <label class="custom-control-label" :for="product.id">{{product.name}}</label>
