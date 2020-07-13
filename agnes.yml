@@ -10,11 +10,11 @@ github:
   api_token: '%env(GITHUB_API_TOKEN)%'
   repository: famoser/wall
 
-files:
+data:
   shared_folders:
     - var/persistent
 
-  configuration_files:
+  files:
     - path: .env.local
       required: true
 
@@ -45,7 +45,8 @@ scripts:
     hook: after_deploy
     instance_filter: '*:*:dev'
     script:
-      - php bin/console doctrine:fixtures:load -q
+      - wget -O composer.phar https://getcomposer.org/composer-stable.phar && chmod +x composer.phar && ./composer.phar install --optimize-autoloader --no-scripts
+      - php bin/console --env=dev doctrine:fixtures:load -q
 
 tasks:
   copy_staging_after_deploy:
