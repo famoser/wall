@@ -1,0 +1,37 @@
+{
+  "hello_world": "hello world",
+  "navigation": {
+  },
+  "buttons": {
+    "save": "Save"
+  },
+  "products": {
+    "categories": {
+      "fruit_vegetables": "Fruits & Vegetables",
+      "dairy_products_eggs": "Dairy Products & Eggs",
+      "bread_backed_goods": "Bread & Backed Goods",
+      "inventories": "Inventories",
+      "frozen_food_ready_made_meals": "Frozen Food & Ready Made Meals",
+      "drinks": "Drinks",
+      "household": "Household"
+    }
+  },
+  "entity": {
+    "user": {
+      "name": "Name",
+      "pin": "PIN"
+    },
+    "product": {
+      "name": "Name",
+      "category": "Category"
+    }
+  },
+  "messages": {
+    "danger": {
+      "request_failed": "the server request failed",
+      "pin_wrong": "PIN is wrong",
+      "must_set_pin": "you need to set a PIN",
+      "confirm_remove": "do you really want to remove this?"
+    }
+  }
+}

@@ -43,7 +43,7 @@ scripts:
 
   fixtures:
     hook: after_deploy
-    instance_filter: '*:*:dev'
+    instance_filter: *:*:dev
     script:
       - php bin/console doctrine:fixtures:load -q
 
@@ -51,13 +51,13 @@ tasks:
   copy_staging_after_deploy:
     after: deploy
     action: copy
-    instance_filter: '*:*:staging'
+    instance_filter: *:*:staging
     arguments: { source: production }
 
   deploy_dev_after_release:
     after: release
     action: deploy
-    arguments: { target: '*:*:dev' }
+    arguments: { target: *:*:dev }
 
 policies:
   strategy: unanimous # all matching policies must be valid
