@@ -56,7 +56,7 @@ tasks:
     arguments: { source: prod }
 
   deploy_dev_after_release:
-    after: build
+    after: release
     task: deploy
     arguments: { target: '*:*:dev' }
 
