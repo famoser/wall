@@ -50,13 +50,13 @@ scripts:
 
 tasks:
   copy_prod_to_staging_before_deploy:
-    after: deploy
+    before: deploy
     task: copy
     instance_filter: '*:*:staging'
     arguments: { source: prod }
 
   deploy_dev_after_release:
-    after: release
+    after: build
     task: deploy
     arguments: { target: '*:*:dev' }
 
