@@ -49,30 +49,32 @@ scripts:
       - php bin/console --env=dev doctrine:fixtures:load -q
 
 tasks:
-  copy_staging_after_deploy:
+  copy_prod_to_staging_before_deploy:
     after: deploy
-    action: copy
+    task: copy
     instance_filter: '*:*:staging'
-    arguments: { source: production }
+    arguments: { source: prod }
 
   deploy_dev_after_release:
     after: release
-    action: deploy
+    task: deploy
     arguments: { target: '*:*:dev' }
 
 policies:
-  strategy: unanimous # all matching policies must be valid
-  allow_if_all_abstain: true # if no matching policy is found, the execution is allowed
+  prod_releases_must_exist_on_staging:
+    task: deploy
+    type: stage_write_up
+    layers:
+      0: [staging]
+      1: [prod]
 
-  deploy:
-    - type: stage_write_up
-      layers:
-        0: [dev]
-        1: [production]
+  copy_only_to_lower_environments:
+    task: copy
+    type: stage_write_down
+    layers:
+      0: [dev, staging]
+      1: [prod]
 
-  copy_shared:
-    - type: stage_write_down
-      layers:
-        0: [dev]
-        1: [production]
-    - type: same_release
+  copy_only_within_same_release:
+    task: copy
+    type: same_release

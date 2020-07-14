@@ -42,12 +42,12 @@
             <font-awesome-icon :icon="['fal', 'sync']"></font-awesome-icon>
         </button>
 
-        <b-modal id="modal-authentication" v-model="modelAuthenticationShow" :centered="true" hide-header
+        <b-modal id="modal-authentication" v-model="modalAuthenticationShow" :centered="true" hide-header
                  @cancel="authenticated = null"
                  @ok="pinEntered">
             <div class="form-group">
                 <input ref="password" type="password" class="form-control form-control-lg" id="pin"
-                       :placeholder="$t('entity.user.pin')" autofocus v-model="pin">
+                       :placeholder="$t('entity.user.pin')" @keydown.enter="pinEntered" autofocus v-model="pin">
             </div>
         </b-modal>
 
@@ -93,7 +93,7 @@
                 selected: Object.assign({}, defaultUser),
                 pin: null,
                 mode: 'view',
-                modelAuthenticationShow: false,
+                modalAuthenticationShow: false,
                 newPin: null
             }
         },
@@ -115,6 +115,7 @@
                 return Math.floor(Math.sin(pin) * 10000);
             },
             pinEntered: function () {
+                this.modalAuthenticationShow = false;
                 let randomized = this.pseudoRandomizePIN(this.pin)
                 if (this.selected.pin !== randomized) {
 
@@ -181,7 +182,7 @@
             }
         },
         watch: {
-            modelAuthenticationShow: function (value) {
+            modalAuthenticationShow: function (value) {
                 if (value) {
                     window.setTimeout(() => {
                         this.$refs.password.focus();
@@ -191,7 +192,7 @@
         },
         computed: {
             authorized: function () {
-                return this.authenticated !== null;
+                return this.authenticated;
             }
         },
         mounted() {
