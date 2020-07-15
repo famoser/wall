@@ -12,16 +12,29 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\UserRewardAction;
 use App\Entity\Base\BaseEntity;
 use App\Entity\Traits\IdTrait;
 use App\Entity\Traits\TimeTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={"GET", "POST"},
+ *     itemOperations={
+ *       "get",
+ *       "post_user_reward"={
+ *         "method"="PATCH",
+ *         "path"="/users/{id}/reward",
+ *         "controller"= UserRewardAction::class,
+ *         "denormalization_context"={"groups"={"reward"}},
+ *       }
+ *     }
+ *  )
  */
 class User extends BaseEntity
 {
@@ -47,6 +60,7 @@ class User extends BaseEntity
     /**
      * @var int
      * @Assert\Range(min=0, max=200000)
+     * @Groups("reward")
      *
      * @ORM\Column(type="integer")
      */
