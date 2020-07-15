@@ -26,8 +26,7 @@
         <template v-for="(productCategory, index) in productCategories">
             <p class="lead mb-0">{{ $t("products.categories." + productCategory.name) }}</p>
             <div v-for="product in productCategory.products">
-                <div v-if="mode === 'view' || mode === 'shopping'"
-                     class="custom-control custom-checkbox">
+                <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input"
                            v-model="product.active"
                            @change="save(product)"
@@ -35,18 +34,23 @@
                            :key="product.id"
                            :disabled="!authorized"
                     >
-                    <label class="custom-control-label" :for="product.id">{{product.name}}</label>
-                </div>
-                <div v-if="mode === 'edit'">
-                    <div class="btn-group">
-                        <button class="btn" @click="edit(product)">
-                            <font-awesome-icon class="text-warning" :icon="['fal', 'pencil']"></font-awesome-icon>
-                        </button>
-                        <button class="btn" @click="remove(product)">
-                            <font-awesome-icon class="text-danger" :icon="['fal', 'trash']"></font-awesome-icon>
-                        </button>
-                    </div>
-                    {{product.name}}
+                    <label class="custom-control-label" :for="product.id">
+                        {{product.name}}
+                        <span v-if="mode === 'edit'">
+                                <button class="btn btn-sm" @click="edit(product)">
+                                    <font-awesome-icon
+                                            class="text-warning"
+                                            :icon="['fal', 'pencil']">
+                                    </font-awesome-icon>
+                                </button>
+                                <button class="btn btn-sm" @click="remove(product)">
+                                    <font-awesome-icon
+                                            class="text-danger"
+                                            :icon="['fal', 'trash']">
+                                    </font-awesome-icon>
+                                </button>
+                            </span>
+                    </label>
                 </div>
             </div>
             <div class="mb-4" v-if="index < productCategories.length - 1"></div>
