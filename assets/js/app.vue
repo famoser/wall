@@ -19,6 +19,7 @@
                         <spinner :spin="products === null">
                             <products :products="products"
                                       :authorized="authorized"
+                                      @reward="reward"
                                       @add-product="addProduct"
                                       @patch-product="patchProduct"
                                       @delete-product="deleteProduct">
@@ -68,6 +69,14 @@
             Products
         },
         methods: {
+            reward: function(reward) {
+                let user = this.selectedUser;
+                axios.patch("/api/users/" + user.id + "/reward", {
+                    "karma": reward
+                }).then((response) => {
+                    Object.assign(user, response.data);
+                });
+            },
             selectUser: function (user, secret) {
                 this.selectedUser = user;
                 this.secret = secret
@@ -85,8 +94,8 @@
             },
             deleteUser: function (id) {
                 axios.delete("/api/users/" + id).then(() => {
-                    let product = this.users.find(p => p.id === id);
-                    let index = this.users.indexOf(product);
+                    let user = this.users.find(p => p.id === id);
+                    let index = this.users.indexOf(user);
                     this.$delete(this.users, index)
                 });
             },

@@ -138,6 +138,10 @@
                 } else {
                     this.$emit("add-product", update);
                 }
+
+                if (!product.active && this.mode === 'shopping') {
+                    this.$emit("reward", 1);
+                }
             },
             confirmEdit: function () {
                 this.save(this.selected);
