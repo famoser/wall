@@ -29,7 +29,23 @@
                 </div>
             </div>
             <div class="col-lg-6 h-100 bg-success">
-
+                <div class="card mt-1 mb-1 mh-100 overflow-auto">
+                    <div class="card-body">
+                        <spinner :spin="questions === null || answers === null">
+                            <questions :questions="questions"
+                                       :answers="answers"
+                                       :authorized-user="selectedUser"
+                                       @reward="reward"
+                                       @add-question="addQuestion"
+                                       @patch-question="patchQuestion"
+                                       @delete-queston="deleteQuestion"
+                                       @add-answer="addAnswer"
+                                       @patch-answer="patchAnswer"
+                                       @delete-answer="deleteAnswer">
+                            </questions>
+                        </spinner>
+                    </div>
+                </div>
             </div>
             <div class="col-lg-3 h-100 bg-warning">
 
@@ -44,6 +60,7 @@
     import Spinner from "./components/Spinner"
     import Accounts from "./components/Accounts"
     import Products from "./components/Products"
+    import Questions from "./components/Questions"
 
     import Noty from 'noty';
 
@@ -57,6 +74,7 @@
                 users: null,
                 events: null,
                 questions: null,
+                answers: null,
                 tasks: null,
                 settings: null,
                 selectedUser: null,
@@ -66,10 +84,11 @@
         components: {
             Spinner,
             Accounts,
-            Products
+            Products,
+            Questions
         },
         methods: {
-            reward: function(reward) {
+            reward: function (reward) {
                 let user = this.selectedUser;
                 axios.patch("/api/users/" + user.id + "/reward", {
                     "karma": reward
@@ -116,6 +135,42 @@
                     let index = this.products.indexOf(product);
                     this.$delete(this.products, index)
                 });
+            },
+            addQuestion: function (question) {
+                axios.post("/api/questions", question).then((response) => {
+                    Object.assign(question, response.data);
+                    this.questions.push(question);
+                });
+            },
+            patchQuestion: function (id, question) {
+                axios.patch("/api/questions/" + id, question).then((response) => {
+                    Object.assign(question, response.data);
+                });
+            },
+            deleteQuestion: function (id) {
+                axios.delete("/api/questions/" + id).then(() => {
+                    let question = this.questions.find(p => p.id === id);
+                    let index = this.questions.indexOf(question);
+                    this.$delete(this.questions, index)
+                });
+            },
+            addAnswer: function (answer) {
+                axios.post("/api/answers", answer).then((response) => {
+                    Object.assign(answer, response.data);
+                    this.answers.push(answer);
+                });
+            },
+            patchAnswer: function (id, answer) {
+                axios.patch("/api/answers/" + id, answer).then((response) => {
+                    Object.assign(answer, response.data);
+                });
+            },
+            deleteAnswer: function (id) {
+                axios.delete("/api/answers/" + id).then(() => {
+                    let answer = this.answers.find(p => p.id === id);
+                    let index = this.answers.indexOf(answer);
+                    this.$delete(this.answers, index)
+                });
             }
         },
         computed: {
@@ -143,6 +198,14 @@
 
             axios.get("/api/products").then((response) => {
                 this.products = response.data["hydra:member"];
+            });
+
+            axios.get("/api/questions").then((response) => {
+                this.questions = response.data["hydra:member"];
+            });
+
+            axios.get("/api/answers").then((response) => {
+                this.answers = response.data["hydra:member"];
             });
 
             axios.get("/api/users").then((response) => {
