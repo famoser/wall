@@ -14,9 +14,35 @@
             </button>
         </div>
 
-        <template v-for="answeredQuestion in answeredQuestions">
-            <p class="lead mb-0">{{ answeredQuestion.text }}</p>
-            <span v-if="mode === 'edit'">
+        <template v-if="mode !== 'edit'" v-for="question in openQuestions">
+            <div class="card mb-2">
+                <div class="card-body">
+                    <p class="lead mb-0">
+                        {{ question.text }}
+                        <button class="btn btn-primary">
+                            {{ $t("questions.answers.yes") }}
+                        </button>
+                        <button class="btn btn-secondary">
+                            {{ $t("questions.answers.no") }}
+                        </button>
+                    </p>
+                </div>
+            </div>
+        </template>
+
+        <template v-if="mode !== 'edit'" v-for="questionWithAnswers in questionsWithAnswers">
+            <p class="mb-0">
+                <span class="lead">{{ questionWithAnswers.question.text }}</span> <br/>
+                {{questionWithAnswers }}
+                <span v-if="questionWithAnswers.yes.length > 0">{{ ' '.join(questionWithAnswers.yes) }}</span>
+                <span v-if="questionWithAnswers.no.length > 0">{{ ' '.join(questionWithAnswers.no) }}</span>
+            </p>
+        </template>
+
+
+        <template v-if="mode === 'edit'" v-for="question in questions">
+            <p class="lead mb-0">
+                {{ question.text }}
                 <button class="btn btn-sm" @click="edit(question)">
                     <font-awesome-icon
                             class="text-warning"
@@ -29,7 +55,7 @@
                             :icon="['fal', 'trash']">
                     </font-awesome-icon>
                 </button>
-            </span>
+            </p>
         </template>
 
         <b-modal id="modal-question-edit" :centered="true" hide-header
@@ -72,6 +98,10 @@
                 required: true
             },
             answers: {
+                type: Array,
+                required: true
+            },
+            users: {
                 type: Array,
                 required: true
             },
@@ -150,7 +180,7 @@
             },
             ownAnswerForQuestion: function (question) {
                 return this.answersForQuestion(question, this.answers)
-                    .find(a => a.user['@id'] === this.authorizedUser['@id']);
+                    .find(a => a.user === this.authorizedUser);
             }
         },
         computed: {
@@ -163,13 +193,22 @@
                     return !this.ownAnswerForQuestion(question);
                 });
             },
-            answeredQuestions: function () {
-                this.questions.map(question => {
+            questionsWithAnswers: function () {
+                return this.questions.map(question => {
                     const answers = this.answersForQuestion(question, this.answers);
+                    const yes = answers.filter(a => a.value === 1).map(a => {
+                        const user = a.user.find(u => u["@id"] === a.user);
+                        return user.name;
+                    });
+                    const no = answers.filter(a => a.value === 2).map(a => {
+                        const user = a.user.find(u => u["@id"] === a.user);
+                        return user.name;
+                    });
 
                     return {
-                        "text": question.text,
-                        "answers": answers
+                        "question": question,
+                        "yes": yes,
+                        "no": no
                     }
                 });
             }

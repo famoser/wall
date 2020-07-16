@@ -31,9 +31,10 @@
             <div class="col-lg-6 h-100 bg-success">
                 <div class="card mt-1 mb-1 mh-100 overflow-auto">
                     <div class="card-body">
-                        <spinner :spin="questions === null || answers === null">
+                        <spinner :spin="questions === null || answers === null || users === null">
                             <questions :questions="questions"
                                        :answers="answers"
+                                       :users="users"
                                        :authorized-user="selectedUser"
                                        @reward="reward"
                                        @post-question="postQuestion"

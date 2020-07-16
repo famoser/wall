@@ -20,6 +20,10 @@
     "repetitions": {
       "none": "never",
       "daily": "daily"
+    },
+    "answers": {
+      "yes": "Yes",
+      "no": "No"
     }
   },
   "entity": {
