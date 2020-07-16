@@ -14,28 +14,29 @@
             </button>
         </div>
 
-        <template v-if="mode !== 'edit'" v-for="question in openQuestions">
-            <div class="card mb-2">
-                <div class="card-body">
-                    <p class="lead mb-0">
-                        {{ question.text }}
-                        <button class="btn btn-primary">
-                            {{ $t("questions.answers.yes") }}
-                        </button>
-                        <button class="btn btn-secondary">
-                            {{ $t("questions.answers.no") }}
-                        </button>
-                    </p>
-                </div>
-            </div>
-        </template>
+        <template v-if="mode !== 'edit'" v-for="questionWithAnswer in questionsWithAnswers">
+            <p class="mb-0 mt-2">
+                <span class="lead">{{ questionWithAnswer.question.text }}</span>
+                <span v-if="questionWithAnswer.yes.length > 0" class="text-success ml-2">{{ questionWithAnswer.yes.join(", ") }}</span>
+                <span v-if="questionWithAnswer.no.length > 0" class="text-danger ml-2">{{ questionWithAnswer.no.join(", ") }}</span>
 
-        <template v-if="mode !== 'edit'" v-for="questionWithAnswers in questionsWithAnswers">
-            <p class="mb-0">
-                <span class="lead">{{ questionWithAnswers.question.text }}</span> <br/>
-                {{questionWithAnswers }}
-                <span v-if="questionWithAnswers.yes.length > 0">{{ ' '.join(questionWithAnswers.yes) }}</span>
-                <span v-if="questionWithAnswers.no.length > 0">{{ ' '.join(questionWithAnswers.no) }}</span>
+
+                <span v-if="questionWithAnswer.own">
+                    <button class="btn btn-sm" @click="removeAnswer(questionWithAnswer.own)">
+                        <font-awesome-icon
+                                class="text-secondary"
+                                :icon="['fal', 'times']">
+                        </font-awesome-icon>
+                    </button>
+                </span>
+                <span v-else class="ml-2 mr-2">
+                    <button class="btn btn-outline-success" @click="addAnswer(questionWithAnswer.question, 1)">
+                        {{ $t("questions.answers.yes") }}
+                    </button>
+                    <button class="btn btn-outline-danger" @click="addAnswer(questionWithAnswer.question, 2)">
+                        {{ $t("questions.answers.no") }}
+                    </button>
+                </span>
             </p>
         </template>
 
@@ -147,7 +148,7 @@
                     "value": value,
                     "givenAt": moment().toISOString(),
                     "question": question['@id'],
-                    "user": question.repetition,
+                    "user": this.authorizedUser["@id"],
                 }
                 if (existingAnswer) {
                     this.$emit("patch-answer", existingAnswer, payload)
@@ -155,9 +156,8 @@
                     this.$emit("post-answer", payload);
                 }
             },
-            removeAnswer: function () {
-                const existingAnswer = this.ownAnswerForQuestion(question);
-                this.$emit("delete-answer", existingAnswer);
+            removeAnswer: function (answer) {
+                this.$emit("delete-answer", answer);
             },
             edit: function (question) {
                 this.selected = question
@@ -170,7 +170,7 @@
                 this.$bvModal.show("modal-question-remove");
             },
             answersForQuestion: function (question, availableAnswers) {
-                let answers = availableAnswers.filter(a => a.question['@id'] === question['@id']);
+                let answers = availableAnswers.filter(a => a.question === question['@id']);
                 if (question.repetition === 1) { // daily
                     const today = moment().startOf("day").toISOString();
                     answers = answers.filter(a => a.givenAt > today);
@@ -179,36 +179,29 @@
                 return answers;
             },
             ownAnswerForQuestion: function (question) {
-                return this.answersForQuestion(question, this.answers)
-                    .find(a => a.user === this.authorizedUser);
+                return this.ownAnswer(this.answersForQuestion(question, this.answers));
+            },
+            ownAnswer: function (availableAnswers) {
+                return availableAnswers.find(a => a.user === this.authorizedUser["@id"]);
             }
         },
         computed: {
-            openQuestions: function () {
-                if (!this.authorizedUser) {
-                    return [];
-                }
-
-                return this.questions.filter(question => {
-                    return !this.ownAnswerForQuestion(question);
-                });
-            },
             questionsWithAnswers: function () {
+                let userNameById = {};
+                this.users.forEach(u => userNameById[u["@id"]] = u.name);
+
                 return this.questions.map(question => {
                     const answers = this.answersForQuestion(question, this.answers);
-                    const yes = answers.filter(a => a.value === 1).map(a => {
-                        const user = a.user.find(u => u["@id"] === a.user);
-                        return user.name;
-                    });
-                    const no = answers.filter(a => a.value === 2).map(a => {
-                        const user = a.user.find(u => u["@id"] === a.user);
-                        return user.name;
-                    });
+                    const own = this.ownAnswer(answers);
+
+                    const yes = answers.filter(a => a.value === 1).map(a => userNameById[a.user]);
+                    const no = answers.filter(a => a.value === 2).map(a => userNameById[a.user]);
 
                     return {
-                        "question": question,
-                        "yes": yes,
-                        "no": no
+                        question,
+                        own,
+                        yes,
+                        no
                     }
                 });
             }

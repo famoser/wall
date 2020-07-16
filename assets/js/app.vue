@@ -39,7 +39,7 @@
                                        @reward="reward"
                                        @post-question="postQuestion"
                                        @patch-question="patch"
-                                       @delete-queston="deleteQuestion"
+                                       @delete-question="deleteQuestion"
                                        @post-answer="postAnswer"
                                        @patch-answer="patch"
                                        @delete-answer="deleteAnswer">
