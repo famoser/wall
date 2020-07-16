@@ -7,8 +7,8 @@
                         <spinner :spin="users === null">
                             <accounts :users="users"
                                       @select-user="selectUser"
-                                      @add-user="addUser"
-                                      @patch-user="patchUser"
+                                      @post-user="postUser"
+                                      @patch-user="patch"
                                       @delete-user="deleteUser"
                             ></accounts>
                         </spinner>
@@ -20,8 +20,8 @@
                             <products :products="products"
                                       :authorized="authorized"
                                       @reward="reward"
-                                      @add-product="addProduct"
-                                      @patch-product="patchProduct"
+                                      @post-product="postProduct"
+                                      @patch-product="patch"
                                       @delete-product="deleteProduct">
                             </products>
                         </spinner>
@@ -36,11 +36,11 @@
                                        :answers="answers"
                                        :authorized-user="selectedUser"
                                        @reward="reward"
-                                       @add-question="addQuestion"
-                                       @patch-question="patchQuestion"
+                                       @post-question="postQuestion"
+                                       @patch-question="patch"
                                        @delete-queston="deleteQuestion"
-                                       @add-answer="addAnswer"
-                                       @patch-answer="patchAnswer"
+                                       @post-answer="postAnswer"
+                                       @patch-answer="patch"
                                        @delete-answer="deleteAnswer">
                             </questions>
                         </spinner>
@@ -90,7 +90,7 @@
         methods: {
             reward: function (reward) {
                 let user = this.selectedUser;
-                axios.patch("/api/users/" + user.id + "/reward", {
+                axios.patch(user["@id"] + "/reward", {
                     "karma": reward
                 }).then((response) => {
                     Object.assign(user, response.data);
@@ -100,77 +100,46 @@
                 this.selectedUser = user;
                 this.secret = secret
             },
-            addUser: function (user) {
-                axios.post("/api/users", user).then((response) => {
-                    Object.assign(user, response.data);
-                    this.users.push(user);
+            postUser: function (user) {
+                this.post("/api/users", user, this.users);
+            },
+            deleteUser: function (entity) {
+                this.delete(entity, this.users);
+            },
+            postProduct: function (product) {
+                this.post("/api/products", product, this.products);
+            },
+            deleteProduct: function (entity) {
+                this.delete(entity, this.products);
+            },
+            post: function (url, payload, list) {
+                axios.post(url, payload).then((response) => {
+                    Object.assign(payload, response.data);
+                    list.push(payload);
                 });
             },
-            patchUser: function (id, user) {
-                axios.patch("/api/users/" + id, user).then((response) => {
-                    Object.assign(user, response.data);
+            patch: function (entity, payload) {
+                axios.patch(entity['@id'], payload).then((response) => {
+                    Object.assign(entity, response.data);
                 });
             },
-            deleteUser: function (id) {
-                axios.delete("/api/users/" + id).then(() => {
-                    let user = this.users.find(p => p.id === id);
-                    let index = this.users.indexOf(user);
-                    this.$delete(this.users, index)
+            delete: function (entity, list) {
+                axios.delete(entity['@id']).then(() => {
+                    let index = list.indexOf(entity);
+                    this.$delete(list, index)
                 });
             },
-            addProduct: function (product) {
-                axios.post("/api/products", product).then((response) => {
-                    Object.assign(product, response.data);
-                    this.products.push(product);
-                });
+            postQuestion: function (question) {
+                this.post("/api/questions", question, this.questions);
             },
-            patchProduct: function (id, product) {
-                axios.patch("/api/products/" + id, product).then((response) => {
-                    Object.assign(product, response.data);
-                });
+            deleteQuestion: function (question) {
+                this.delete(question, this.questions);
             },
-            deleteProduct: function (id) {
-                axios.delete("/api/products/" + id).then(() => {
-                    let product = this.products.find(p => p.id === id);
-                    let index = this.products.indexOf(product);
-                    this.$delete(this.products, index)
-                });
+            postAnswer: function (answer) {
+                this.post("/api/answers", answer, this.answers);
             },
-            addQuestion: function (question) {
-                axios.post("/api/questions", question).then((response) => {
-                    Object.assign(question, response.data);
-                    this.questions.push(question);
-                });
-            },
-            patchQuestion: function (id, question) {
-                axios.patch("/api/questions/" + id, question).then((response) => {
-                    Object.assign(question, response.data);
-                });
-            },
-            deleteQuestion: function (id) {
-                axios.delete("/api/questions/" + id).then(() => {
-                    let question = this.questions.find(p => p.id === id);
-                    let index = this.questions.indexOf(question);
-                    this.$delete(this.questions, index)
-                });
-            },
-            addAnswer: function (answer) {
-                axios.post("/api/answers", answer).then((response) => {
-                    Object.assign(answer, response.data);
-                    this.answers.push(answer);
-                });
-            },
-            patchAnswer: function (id, answer) {
-                axios.patch("/api/answers/" + id, answer).then((response) => {
-                    Object.assign(answer, response.data);
-                });
-            },
-            deleteAnswer: function (id) {
-                axios.delete("/api/answers/" + id).then(() => {
-                    let answer = this.answers.find(p => p.id === id);
-                    let index = this.answers.indexOf(answer);
-                    this.$delete(this.answers, index)
-                });
+            deleteAnswer: function (answer) {
+                this.delete(answer, this.answers);
             }
         },
         computed: {

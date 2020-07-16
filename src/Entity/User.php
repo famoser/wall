@@ -26,13 +26,15 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\HasLifecycleCallbacks
  * @ApiResource(
  *     collectionOperations={"GET", "POST"},
+ *     normalizationContext={"groups"={"user-read"}},
+ *     denormalizationContext={"groups"={"user-write"}}),
  *     itemOperations={
  *       "get",
  *       "post_user_reward"={
  *         "method"="PATCH",
  *         "path"="/users/{id}/reward",
  *         "controller"= UserRewardAction::class,
- *         "denormalization_context"={"groups"={"reward"}},
+ *         "denormalization_context"={"groups"={"user-reward"}},
  *       }
  *     }
  *  )
@@ -45,6 +47,7 @@ class User extends BaseEntity
     /**
      * @var string
      * @Assert\NotBlank
+     * @Groups({"user-read", "user-write"})
      *
      * @ORM\Column(type="text")
      */
@@ -53,6 +56,7 @@ class User extends BaseEntity
     /**
      * @var int
      * @Assert\NotBlank
+     * @Groups({"user-read", "user-write"})
      *
      * @ORM\Column(type="integer")
      */
@@ -61,14 +65,14 @@ class User extends BaseEntity
     /**
      * @var int
      * @Assert\Range(min=0, max=200000)
-     * @Groups("reward")
+     * @Groups({"user-reward", "user-read"})
      *
      * @ORM\Column(type="integer")
      */
     private $karma = 0;
 
     /**
-     * @var Answer[]
+     * @var Answer[]|ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Answer", mappedBy="user", cascade={"remove"})
      */
@@ -110,9 +114,9 @@ class User extends BaseEntity
     }
 
     /**
-     * @return Answer[]
+     * @return Answer[]|ArrayCollection
      */
-    public function getAnswers(): array
+    public function getAnswers()
     {
         return $this->answers;
     }

@@ -3,7 +3,7 @@
         <div class="btn-group btn-group-toggle" v-if="mode === 'view'">
             <label class="btn btn-outline-secondary"
                    v-for="user in users"
-                   :id="user.id"
+                   :id="user['@id']"
                    :class="{'active': authenticated === user }">
                 <input type="checkbox" autocomplete="off" :true-value="user" :false-value="null" @change="authenticateUser(user)">
                 {{user.name}}
@@ -118,7 +118,6 @@
                 this.modalAuthenticationShow = false;
                 let randomized = this.pseudoRandomizePIN(this.pin)
                 if (this.selected.pin !== randomized) {
-
                     new Noty({
                         text: this.$t("messages.danger.pin_wrong"),
                         theme: 'bootstrap-v4',
@@ -134,7 +133,7 @@
                     "name": this.selected.name
                 }
 
-                if (!this.newPin && !this.selected.persistedInDatabase) {
+                if (!this.newPin && !this.selected["@id"]) {
                     new Noty({
                         text: this.$t("messages.danger.must_set_pin"),
                         theme: 'bootstrap-v4',
@@ -149,14 +148,14 @@
                     this.newPin = null;
                 }
 
-                if (this.selected.persistedInDatabase) {
-                    this.$emit("patch-user", this.selected.id, update)
+                if (this.selected["@id"]) {
+                    this.$emit("patch-user", this.selected, update)
                 } else {
-                    this.$emit("add-user", update);
+                    this.$emit("post-user", update);
                 }
             },
             confirmRemove: function () {
-                this.$emit("delete-user", this.authenticated.id);
+                this.$emit("delete-user", this.authenticated);
                 this.logout();
                 this.mode = 'view'
             },

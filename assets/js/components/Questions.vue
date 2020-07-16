@@ -41,8 +41,8 @@
             </div>
             <div class="form-group">
                 <select class="form-control form-control-lg" v-model="selected.repetition">
-                    <option :value="0">{{ $t("questions.repetition.none") }}</option>
-                    <option :value="1">{{ $t("questions.repetition.daily") }}</option>
+                    <option :value="0">{{ $t("questions.repetitions.none") }}</option>
+                    <option :value="1">{{ $t("questions.repetitions.daily") }}</option>
                 </select>
             </div>
         </b-modal>
@@ -88,21 +88,22 @@
         },
         methods: {
             save: function (question) {
-                const update = {
+                const payload = {
                     "text": question.text,
                     "repetition": question.repetition,
                 }
-                if (question.persistedInDatabase) {
-                    this.$emit("patch-question", question.id, update)
+
+                if (question["@id"]) {
+                    this.$emit("patch-question", question, payload)
                 } else {
-                    this.$emit("add-question", update);
+                    this.$emit("post-question", payload);
                 }
             },
             confirmEdit: function () {
                 this.save(this.selected);
             },
             confirmRemove: function () {
-                this.$emit("delete-question", this.selected.id);
+                this.$emit("delete-question", this.selected);
             },
             add: function () {
                 this.selected = Object.assign({}, defaultQuestion)
@@ -112,21 +113,21 @@
             addAnswer: function (question, value) {
                 const existingAnswer = this.ownAnswerForQuestion(question);
 
-                const update = {
+                const payload = {
                     "value": value,
                     "givenAt": moment().toISOString(),
-                    "question": question.id,
+                    "question": question['@id'],
                     "user": question.repetition,
                 }
-                if (existingAnswer && existingAnswer.persistedInDatabase) {
-                    this.$emit("patch-answer", existingAnswer.id, update)
+                if (existingAnswer) {
+                    this.$emit("patch-answer", existingAnswer, payload)
                 } else {
-                    this.$emit("add-answer", update);
+                    this.$emit("post-answer", payload);
                 }
             },
             removeAnswer: function () {
                 const existingAnswer = this.ownAnswerForQuestion(question);
-                this.$emit("delete-answer", existingAnswer.id);
+                this.$emit("delete-answer", existingAnswer);
             },
             edit: function (question) {
                 this.selected = question
@@ -139,10 +140,9 @@
                 this.$bvModal.show("modal-question-remove");
             },
             answersForQuestion: function (question, availableAnswers) {
-                let answers = availableAnswers.filter(a => a.question.id === question.id);
+                let answers = availableAnswers.filter(a => a.question['@id'] === question['@id']);
                 if (question.repetition === 1) { // daily
-                    const today = moment().add(-1, "day").endOf("day").toISOString();
-                    console.log("today: " + today);
+                    const today = moment().startOf("day").toISOString();
                     answers = answers.filter(a => a.givenAt > today);
                 }
 
@@ -150,7 +150,7 @@
             },
             ownAnswerForQuestion: function (question) {
                 return this.answersForQuestion(question, this.answers)
-                    .find(a => a.user.id === this.authorizedUser.id);
+                    .find(a => a.user['@id'] === this.authorizedUser['@id']);
             }
         },
         computed: {

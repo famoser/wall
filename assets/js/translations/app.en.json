@@ -16,6 +16,12 @@
       "household": "Household"
     }
   },
+  "questions": {
+    "repetitions": {
+      "none": "never",
+      "daily": "daily"
+    }
+  },
   "entity": {
     "user": {
       "name": "Name",
@@ -24,6 +30,10 @@
     "product": {
       "name": "Name",
       "category": "Category"
+    },
+    "question": {
+      "text": "Question",
+      "repetition": "repeat"
     }
   },
   "messages": {

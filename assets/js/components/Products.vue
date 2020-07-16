@@ -29,12 +29,12 @@
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input"
                            v-model="product.active"
-                           @change="save(product)"
-                           :id="product.id"
-                           :key="product.id"
+                           @change="activeChanged(product)"
+                           :id="product['@id']"
+                           :key="product['@id']"
                            :disabled="!authorized"
                     >
-                    <label class="custom-control-label" :for="product.id">
+                    <label class="custom-control-label" :for="product['@id']">
                         {{product.name}}
                         <span v-if="mode === 'edit'">
                                 <button class="btn btn-sm" @click="edit(product)">
@@ -127,27 +127,31 @@
                         return "other"
                 }
             },
-            save: function (product) {
-                const update = {
-                    "name": product.name,
-                    "category": product.category,
-                    "active": product.active,
-                }
-                if (product.persistedInDatabase) {
-                    this.$emit("patch-product", product.id, update)
-                } else {
-                    this.$emit("add-product", update);
-                }
+            activeChanged: function (product) {
+                this.save(product);
 
-                if (!product.active && this.mode === 'shopping') {
+                if (this.mode === 'shopping') {
                     this.$emit("reward", 1);
                 }
             },
             confirmEdit: function () {
                 this.save(this.selected);
             },
+            save: function(product) {
+                const payload = {
+                    "name": product.name,
+                    "category": product.category,
+                    "active": product.active,
+                };
+
+                if (product["@id"]) {
+                    this.$emit("patch-product", product, payload);
+                } else {
+                    this.$emit("post-product", payload);
+                }
+            },
             confirmRemove: function () {
-                this.$emit("delete-product", this.selected.id);
+                this.$emit("delete-product", this.selected);
             },
             add: function () {
                 this.selected = Object.assign({}, defaultProduct)

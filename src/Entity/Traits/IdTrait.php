@@ -20,8 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait IdTrait
 {
     /**
-     * @var string|null
-     *                  will be null when not inserted into the db yet
+     * @var string|null will be null when not inserted into the db yet
      *
      * @ORM\Id
      * @ORM\Column(name="id", type="guid")

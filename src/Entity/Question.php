@@ -17,12 +17,16 @@ use App\Entity\Traits\IdTrait;
 use App\Entity\Traits\TimeTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={"groups"={"question"}},
+ *     denormalizationContext={"groups"={"question"}}
+ * )
  */
 class Question extends BaseEntity
 {
@@ -35,6 +39,7 @@ class Question extends BaseEntity
     /**
      * @var string
      * @Assert\NotBlank
+     * @Groups("question")
      *
      * @ORM\Column(type="text")
      */
@@ -43,13 +48,14 @@ class Question extends BaseEntity
     /**
      * @var int
      * @Assert\Range(min=0, max=1)
+     * @Groups("question")
      *
      * @ORM\Column(type="integer")
      */
     private $repetition;
 
     /**
-     * @var Answer[]
+     * @var Answer[]|ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Answer", mappedBy="question", cascade={"remove"})
      */
@@ -81,9 +87,9 @@ class Question extends BaseEntity
     }
 
     /**
-     * @return Answer[]
+     * @return Answer[]|ArrayCollection
      */
-    public function getAnswers(): array
+    public function getAnswers()
     {
         return $this->answers;
     }

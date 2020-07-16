@@ -16,12 +16,16 @@ use App\Entity\Base\BaseEntity;
 use App\Entity\Traits\IdTrait;
 use App\Entity\Traits\TimeTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={"groups"={"product"}},
+ *     denormalizationContext={"groups"={"product"}}),
+ * )
  */
 class Product extends BaseEntity
 {
@@ -39,6 +43,7 @@ class Product extends BaseEntity
     /**
      * @var string
      * @Assert\NotBlank
+     * @Groups("product")
      *
      * @ORM\Column(type="text")
      */
@@ -47,6 +52,7 @@ class Product extends BaseEntity
     /**
      * @var int
      * @Assert\Range(min=1, max=7)
+     * @Groups("product")
      *
      * @ORM\Column(type="integer")
      */
@@ -55,6 +61,7 @@ class Product extends BaseEntity
     /**
      * @var bool
      * @Assert\NotNull()
+     * @Groups("product")
      *
      * @ORM\Column(type="boolean")
      */

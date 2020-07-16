@@ -115,7 +115,7 @@ class AppFixtures extends Fixture
             $answer->setQuestion($question);
             $answer->setUser($user);
 
-            $manager->persist($user);
+            $manager->persist($answer);
 
             if (++$userIndex > count($users) - 1) {
                 $userIndex = 0;

@@ -17,12 +17,18 @@ use App\Entity\Traits\IdTrait;
 use App\Entity\Traits\TimeTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks
- * @ApiResource(collectionOperations={"GET", "POST"}, itemOperations={"GET", "DELETE"})
+ * @ApiResource(
+ *     collectionOperations={"GET", "POST"},
+ *     itemOperations={"GET", "DELETE"},
+ *     normalizationContext={"groups"={"answer"}},
+ *     denormalizationContext={"groups"={"answer"}}),
+ * )
  */
 class Answer extends BaseEntity
 {
@@ -33,8 +39,9 @@ class Answer extends BaseEntity
     const VALUE_NO = 2;
 
     /**
-     * @var string
+     * @var int
      * @Assert\NotBlank
+     * @Groups("answer")
      *
      * @ORM\Column(type="integer")
      */
@@ -42,6 +49,8 @@ class Answer extends BaseEntity
 
     /**
      * @var DateTime
+     * @Assert\NotBlank
+     * @Groups("answer")
      *
      * @ORM\Column(type="datetime")
      */
@@ -49,6 +58,8 @@ class Answer extends BaseEntity
 
     /**
      * @var Question
+     * @Assert\NotBlank
+     * @Groups("answer")
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Question", inversedBy="answers")
      */
@@ -56,12 +67,14 @@ class Answer extends BaseEntity
 
     /**
      * @var User
+     * @Assert\NotBlank
+     * @Groups("answer")
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="answers")
      */
     private $user;
 
-    public function getValue(): string
+    public function getValue(): int
     {
         return $this->value;
     }
