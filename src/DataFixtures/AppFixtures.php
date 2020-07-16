@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Answer;
 use App\Entity\Event;
 use App\Entity\Product;
 use App\Entity\Question;
@@ -17,10 +18,11 @@ class AppFixtures extends Fixture
     {
         $this->loadEvents($manager);
         $this->loadProducts($manager);
-        $this->loadQuestions($manager);
+        $users = $this->loadUsers($manager);
+        $questions = $this->loadQuestions($manager);
+        $this->loadAnswers($manager, $questions, $users);
         $this->loadSetting($manager);
         $this->loadTask($manager);
-        $this->loadUsers($manager);
 
         $manager->flush();
     }
@@ -82,24 +84,55 @@ class AppFixtures extends Fixture
             'Hotel?' => Question::REPETITION_NONE,
         ];
 
+        $questions = [];
         foreach ($events as $name => $repetition) {
-            $event = new Question();
-            $event->setText($name);
-            $event->setRepetition($repetition);
+            $question = new Question();
+            $question->setText($name);
+            $question->setRepetition($repetition);
 
-            $manager->persist($event);
+            $manager->persist($question);
+
+            $questions[] = $question;
+        }
+
+        return $questions;
+    }
+
+    /**
+     * @param Question[] $questions
+     * @param User[]     $users
+     */
+    private function loadAnswers(ObjectManager $manager, array $questions, array $users)
+    {
+        $userIndex = 0;
+
+        foreach ($questions as $question) {
+            $user = $users[$userIndex];
+
+            $answer = new Answer();
+            $answer->setValue(0 == $userIndex % 2 ? Answer::VALUE_YES : Answer::VALUE_NO);
+            $answer->setGivenAt(new \DateTime());
+            $answer->setQuestion($question);
+            $answer->setUser($user);
+
+            $manager->persist($user);
+
+            if (++$userIndex > count($users) - 1) {
+                $userIndex = 0;
+            }
         }
     }
 
     private function loadUsers(ObjectManager $manager)
     {
-        $events = [
+        $template = [
             'Florian' => 300,
             'Cédric' => 101,
             'Xenia' => 200,
         ];
 
-        foreach ($events as $name => $karma) {
+        $users = [];
+        foreach ($template as $name => $karma) {
             $user = new User();
             $user->setName($name);
             $user->setKarma($karma);
@@ -107,7 +140,11 @@ class AppFixtures extends Fixture
             $user->setPin($pin);
 
             $manager->persist($user);
+
+            $users[] = $user;
         }
+
+        return $users;
     }
 
     private function loadSetting(ObjectManager $manager)

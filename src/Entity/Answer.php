@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\HasLifecycleCallbacks
  * @ApiResource(collectionOperations={"GET", "POST"}, itemOperations={"GET", "DELETE"})
  */
-class Answers extends BaseEntity
+class Answer extends BaseEntity
 {
     use IdTrait;
     use TimeTrait;

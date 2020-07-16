@@ -49,9 +49,9 @@ class Question extends BaseEntity
     private $repetition;
 
     /**
-     * @var Answers[]
+     * @var Answer[]
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Answers", mappedBy="question", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Answer", mappedBy="question", cascade={"remove"})
      */
     private $answers;
 
@@ -81,7 +81,7 @@ class Question extends BaseEntity
     }
 
     /**
-     * @return Answers[]
+     * @return Answer[]
      */
     public function getAnswers(): array
     {

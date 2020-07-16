@@ -68,9 +68,9 @@ class User extends BaseEntity
     private $karma = 0;
 
     /**
-     * @var Answers[]
+     * @var Answer[]
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Answers", mappedBy="user", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Answer", mappedBy="user", cascade={"remove"})
      */
     private $answers;
 
@@ -110,7 +110,7 @@ class User extends BaseEntity
     }
 
     /**
-     * @return Answers[]
+     * @return Answer[]
      */
     public function getAnswers(): array
     {
