@@ -15,6 +15,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Base\BaseEntity;
 use App\Entity\Traits\IdTrait;
 use App\Entity\Traits\TimeTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -47,6 +48,18 @@ class Question extends BaseEntity
      */
     private $repetition;
 
+    /**
+     * @var Answers[]
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Answers", mappedBy="question", cascade={"remove"})
+     */
+    private $answers;
+
+    public function __construct()
+    {
+        $this->answers = new ArrayCollection();
+    }
+
     public function getText(): string
     {
         return $this->text;
@@ -65,5 +78,13 @@ class Question extends BaseEntity
     public function setRepetition(int $repetition): void
     {
         $this->repetition = $repetition;
+    }
+
+    /**
+     * @return Answers[]
+     */
+    public function getAnswers(): array
+    {
+        return $this->answers;
     }
 }

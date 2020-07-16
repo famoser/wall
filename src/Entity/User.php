@@ -16,6 +16,7 @@ use App\Controller\UserRewardAction;
 use App\Entity\Base\BaseEntity;
 use App\Entity\Traits\IdTrait;
 use App\Entity\Traits\TimeTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -66,6 +67,18 @@ class User extends BaseEntity
      */
     private $karma = 0;
 
+    /**
+     * @var Answers[]
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Answers", mappedBy="user", cascade={"remove"})
+     */
+    private $answers;
+
+    public function __construct()
+    {
+        $this->answers = new ArrayCollection();
+    }
+
     public function getName(): string
     {
         return $this->name;
@@ -94,5 +107,13 @@ class User extends BaseEntity
     public function setKarma(int $karma): void
     {
         $this->karma = $karma;
+    }
+
+    /**
+     * @return Answers[]
+     */
+    public function getAnswers(): array
+    {
+        return $this->answers;
     }
 }
