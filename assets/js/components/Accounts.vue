@@ -5,7 +5,8 @@
                    v-for="user in users"
                    :id="user['@id']"
                    :class="{'active': authenticated === user }">
-                <input type="checkbox" autocomplete="off" :true-value="user" :false-value="null" @change="authenticateUser(user)">
+                <input type="checkbox" autocomplete="off" :true-value="user" :false-value="null"
+                       @change="authenticateUser(user)">
                 {{user.name}}
                 <span class="badge badge-pill"
                       :class="{'badge-light': selected === user, 'badge-secondary': selected !== user}">

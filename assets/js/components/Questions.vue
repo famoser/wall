@@ -185,7 +185,7 @@
                 if (!this.authorizedUser) {
                     return null;
                 }
-                
+
                 return availableAnswers.find(a => a.user === this.authorizedUser["@id"]);
             }
         },

@@ -137,7 +137,7 @@
             confirmEdit: function () {
                 this.save(this.selected);
             },
-            save: function(product) {
+            save: function (product) {
                 const payload = {
                     "name": product.name,
                     "category": product.category,
