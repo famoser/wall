@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid h-100">
         <div class="row h-100">
-            <div class="col-lg-3 h-100 d-flex flex-column">
+            <div class="col-lg-3 h-100 d-flex flex-column bg-light">
                 <div class="card mt-1">
                     <div class="card-body">
                         <spinner :spin="users === null">
@@ -28,7 +28,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 h-100 bg-success">
+            <div class="col-lg-6 h-100 bg-light">
+            </div>
+            <div class="col-lg-3 h-100 bg-light">
                 <div class="card mt-1 mb-1 mh-100 overflow-auto">
                     <div class="card-body">
                         <spinner :spin="questions === null || answers === null || users === null">
@@ -48,12 +50,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 h-100 bg-warning">
-
-            </div>
         </div>
     </div>
-</template>W
+</template>
 
 <script>
     import moment from "moment";

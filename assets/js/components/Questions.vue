@@ -20,26 +20,26 @@
                 <span v-if="questionWithAnswer.yes.length > 0" class="text-success ml-2">{{ questionWithAnswer.yes.join(", ") }}</span>
                 <span v-if="questionWithAnswer.no.length > 0" class="text-danger ml-2">{{ questionWithAnswer.no.join(", ") }}</span>
 
-
-                <span v-if="questionWithAnswer.own">
-                    <button class="btn btn-sm" @click="removeAnswer(questionWithAnswer.own)">
-                        <font-awesome-icon
-                                class="text-secondary"
-                                :icon="['fal', 'times']">
-                        </font-awesome-icon>
-                    </button>
-                </span>
-                <span v-else class="ml-2 mr-2">
-                    <button class="btn btn-outline-success" @click="addAnswer(questionWithAnswer.question, 1)">
-                        {{ $t("questions.answers.yes") }}
-                    </button>
-                    <button class="btn btn-outline-danger" @click="addAnswer(questionWithAnswer.question, 2)">
-                        {{ $t("questions.answers.no") }}
-                    </button>
-                </span>
+                <template v-if="authorizedUser !== null">
+                    <span v-if="questionWithAnswer.own">
+                        <button class="btn btn-sm" @click="removeAnswer(questionWithAnswer.own)">
+                            <font-awesome-icon
+                                    class="text-secondary"
+                                    :icon="['fal', 'times']">
+                            </font-awesome-icon>
+                        </button>
+                    </span>
+                        <span v-else class="ml-2 mr-2">
+                        <button class="btn btn-outline-success" @click="addAnswer(questionWithAnswer.question, 1)">
+                            {{ $t("questions.answers.yes") }}
+                        </button>
+                        <button class="btn btn-outline-danger" @click="addAnswer(questionWithAnswer.question, 2)">
+                            {{ $t("questions.answers.no") }}
+                        </button>
+                    </span>
+                </template>
             </p>
         </template>
-
 
         <template v-if="mode === 'edit'" v-for="question in questions">
             <p class="lead mb-0">
@@ -182,6 +182,10 @@
                 return this.ownAnswer(this.answersForQuestion(question, this.answers));
             },
             ownAnswer: function (availableAnswers) {
+                if (!this.authorizedUser) {
+                    return null;
+                }
+                
                 return availableAnswers.find(a => a.user === this.authorizedUser["@id"]);
             }
         },
