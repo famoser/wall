@@ -49,6 +49,19 @@
                         </spinner>
                     </div>
                 </div>
+                <div class="card mt-1 mb-1 mh-100 overflow-auto">
+                    <div class="card-body">
+                        <spinner :spin="events === null">
+                            <events :events="events"
+                                    :authorized="authorized"
+                                    @reward="reward"
+                                    @post-event="postEvent"
+                                    @patch-event="patch"
+                                    @delete-event="deleteEvent">
+                            </events>
+                        </spinner>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -57,10 +70,11 @@
 <script>
     import moment from "moment";
     import axios from "axios";
-    import Spinner from "./components/Spinner"
     import Accounts from "./components/Accounts"
+    import Events from "./components/Events"
     import Products from "./components/Products"
     import Questions from "./components/Questions"
+    import Spinner from "./components/Spinner"
 
     import Noty from 'noty';
 
@@ -82,10 +96,11 @@
             }
         },
         components: {
-            Spinner,
             Accounts,
+            Events,
             Products,
-            Questions
+            Questions,
+            Spinner
         },
         methods: {
             reward: function (reward) {
@@ -111,6 +126,12 @@
             },
             deleteProduct: function (entity) {
                 this.delete(entity, this.products);
+            },
+            postEvent: function (event) {
+                this.post("/api/events", event, this.events);
+            },
+            deleteEvent: function (entity) {
+                this.delete(entity, this.events);
             },
             post: function (url, payload, list) {
                 axios.post(url, payload).then((response) => {
@@ -165,6 +186,10 @@
                 }
             );
 
+            axios.get("/api/users").then((response) => {
+                this.users = response.data["hydra:member"];
+            });
+
             axios.get("/api/products").then((response) => {
                 this.products = response.data["hydra:member"];
             });
@@ -177,8 +202,8 @@
                 this.answers = response.data["hydra:member"];
             });
 
-            axios.get("/api/users").then((response) => {
-                this.users = response.data["hydra:member"];
+            axios.get("/api/events").then((response) => {
+                this.events = response.data["hydra:member"];
             });
         }
     }

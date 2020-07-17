@@ -35,6 +35,10 @@
       "name": "Name",
       "category": "Category"
     },
+    "event": {
+      "name": "Name",
+      "startAt": "Start at"
+    },
     "question": {
       "text": "Question",
       "repetition": "repeat"
