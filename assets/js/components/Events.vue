@@ -14,9 +14,9 @@
             </button>
         </div>
 
-        <template v-for="event in events">
+        <template v-for="event in orderedEvents">
             <p class="mt-2">
-                {{ formatDate(event.startAt) }} - {{event.name}}
+                {{ formatDateTime(event.startAt) }} - {{event.name}}
 
                 <span v-if="mode === 'edit'">
                     <button class="btn btn-sm" @click="edit(event)">
@@ -45,6 +45,7 @@
             <div class="form-group">
                 <flat-pickr
                         v-model="selected.startAt"
+                        :config="datePickerConfig"
                         class="form-control form-control-lg"
                         :placeholder="$t('entity.event.startAt')"
                         name="date">
@@ -88,8 +89,8 @@
             }
         },
         methods: {
-            formatDate: function (date) {
-                return moment(date).format("DD.MM.YYYY");
+            formatDateTime: function (date) {
+                return moment(date).format("DD.MM.YYYY hh:mm");
             },
             confirmEdit: function () {
                 const payload = {
@@ -120,6 +121,23 @@
                 this.selected = event
 
                 this.$bvModal.show("modal-event-remove");
+            }
+        },
+        computed: {
+            orderedEvents: function () {
+                return this.events.sort((e1, e2) => e1.startAt.localeCompare(e2.startAt));
+            },
+            datePickerConfig: function () {
+                return {
+                    altInput: true,
+                    altFormat: "d.m.Y H:i",
+                    dateFormat: "Y-m-dTH:i",
+                    parseDate: (datestr, format) => {
+                        return moment(datestr, format, true).toISOString();
+                    },
+                    enableTime: true,
+                    time_24hr: true
+                }
             }
         }
     }

@@ -202,7 +202,8 @@
                 this.answers = response.data["hydra:member"];
             });
 
-            axios.get("/api/events").then((response) => {
+            const today = moment().startOf("day").format("YYYY-MM-DD");
+            axios.get("/api/events?startAt[after]=" + today).then((response) => {
                 this.events = response.data["hydra:member"];
             });
         }
