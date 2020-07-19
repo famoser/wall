@@ -8,7 +8,7 @@
 
         <div v-if="!editMode" class="btn-group btn-group-toggle">
             <label class="btn btn-outline-secondary"
-                   v-for="user in users"
+                   v-for="user in orderedUsers"
                    :id="user['@id']"
                    :class="{'active': authenticated === user }">
                 <input type="checkbox" autocomplete="off" :true-value="user" :false-value="null"
@@ -201,6 +201,9 @@
         computed: {
             authorized: function () {
                 return this.authenticated;
+            },
+            orderedUsers: function () {
+                return this.users.sort((u1, u2) => u1.name.localeCompare(u2.name));
             }
         },
         mounted() {
