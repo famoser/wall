@@ -145,7 +145,6 @@
 
                 if (this.newPin) {
                     update.pin = this.pseudoRandomizePIN(this.newPin);
-                    this.login(this.selected, update.pin);
                     this.newPin = null;
                 }
 

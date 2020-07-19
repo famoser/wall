@@ -14,12 +14,12 @@
             </button>
         </div>
 
-        <template v-for="(task, index) in orderedTasks">
-            <div class="progress" v-if="mode === 'view'">
+        <template v-for="task in orderedTasks">
+            <div class="progress mt-2" v-if="mode === 'view'">
                 <div ref="progress" :class="'progress-' + Math.floor(Math.min(task.overduePercentage, 100))" class="progress-bar" role="progressbar" :aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
 
-            <p class="mt-2">
+            <p>
                 {{ task.task.name }}
 
                 <button v-if="mode === 'view' && authorized" class="btn btn-sm float-right" @click="done(task.task)">
@@ -53,15 +53,25 @@
                        :placeholder="$t('entity.task.name')"
                        v-model="selected.name">
             </div>
-            <div class="form-group">
-                <input type="number" class="form-control form-control-lg" id="interval-in-days"
-                       :placeholder="$t('entity.task.interval_in_days')"
-                       v-model="selected.intervalInDays">
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label for="interval-in-days" class="col-form-label-lg">{{ $t('entity.task.interval_in_days') }}</label>
+                </div>
+                <div class="col-md-8">
+                    <input type="number" class="form-control form-control-lg" id="interval-in-days"
+                           :placeholder="$t('entity.task.interval_in_days')"
+                           v-model="selected.intervalInDays">
+                </div>
             </div>
-            <div class="form-group">
-                <input type="number" class="form-control form-control-lg" id="reward"
-                       :placeholder="$t('entity.task.reward')"
-                       v-model="selected.reward">
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <label for="reward" class="col-form-label-lg">{{ $t('entity.task.reward') }}</label>
+                </div>
+                <div class="col-md-8">
+                    <input type="number" class="form-control form-control-lg" id="reward"
+                           :placeholder="$t('entity.task.reward')"
+                           v-model="selected.reward">
+                </div>
             </div>
         </b-modal>
 
@@ -107,8 +117,8 @@
             confirmEdit: function () {
                 const payload = {
                     "name": this.selected.name,
-                    "intervalInDays": this.selected.startAt,
-                    "reward": this.selected.reward
+                    "intervalInDays": parseInt(this.selected.intervalInDays),
+                    "reward": parseInt(this.selected.reward)
                 };
 
                 if (this.selected["@id"]) {
@@ -149,7 +159,7 @@
             orderedTasks: function () {
                 // show most pressing task at the top
                 return this.tasks.map(task => {
-                    if (task.lastExecutionAt === null) {
+                    if (!task.lastExecutionAt) {
                         return {
                             overduePercentage: 100,
                             task
@@ -159,8 +169,6 @@
                     const diff = moment().diff(moment(task.lastExecutionAt));
                     const diffInHours = moment.duration(diff).asHours();
                     const relativeDiff = diffInHours / (task.intervalInDays * 24);
-
-                    console.log(relativeDiff);
 
                     return {
                         overduePercentage: relativeDiff*100,

@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="col-xl-3 h-100 d-flex flex-column bg-light col-lg-6">
-                <div class="card mt-2 mb-2 mh-lg-25 overflow-auto">
+                <div class="card mt-2 mh-lg-25 overflow-auto">
                     <div class="card-body">
                         <spinner :spin="questions === null || answers === null || users === null">
                             <questions :questions="questions"
@@ -47,7 +47,7 @@
                         </spinner>
                     </div>
                 </div>
-                <div class="card mt-2 mb-2 mh-lg-25 overflow-auto">
+                <div class="card mt-2 mh-lg-25 overflow-auto">
                     <div class="card-body">
                         <spinner :spin="events === null">
                             <events :events="events"
@@ -156,8 +156,8 @@
             },
             post: function (url, payload, list) {
                 axios.post(url, payload).then((response) => {
-                    Object.assign(payload, response.data);
-                    list.push(payload);
+                    const newObj = Object.assign({}, response.data);
+                    list.push(newObj);
                 });
             },
             patch: function (entity, payload) {

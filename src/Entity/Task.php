@@ -16,12 +16,16 @@ use App\Entity\Base\BaseEntity;
 use App\Entity\Traits\IdTrait;
 use App\Entity\Traits\TimeTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
+ * @ApiResource(
+ *     normalizationContext={"skip_null_values" = false,"groups"={"task"}},
+ *     denormalizationContext={"groups"={"task"}}),
+ * )
  */
 class Task extends BaseEntity
 {
@@ -31,6 +35,7 @@ class Task extends BaseEntity
     /**
      * @var string
      * @Assert\NotBlank
+     * @Groups("task")
      *
      * @ORM\Column(type="text")
      */
@@ -39,6 +44,7 @@ class Task extends BaseEntity
     /**
      * @var int
      * @Assert\Range(min=1, max=356)
+     * @Groups("task")
      *
      * @ORM\Column(type="integer")
      */
@@ -47,6 +53,7 @@ class Task extends BaseEntity
     /**
      * @var int
      * @Assert\NotBlank
+     * @Groups("task")
      *
      * @ORM\Column(type="integer")
      */
@@ -54,6 +61,7 @@ class Task extends BaseEntity
 
     /**
      * @var \DateTime|null
+     * @Groups("task")
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
