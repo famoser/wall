@@ -25,13 +25,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks
  * @ApiResource(
- *     collectionOperations={"GET", "POST"},
+ *     collectionOperations={"get", "post"},
  *     normalizationContext={"groups"={"user-read"}},
- *     denormalizationContext={"groups"={"user-write"}}),
+ *     denormalizationContext={"groups"={"user-write"}},
  *     itemOperations={
- *       "get",
- *       "post_user_reward"={
- *         "method"="PATCH",
+ *       "GET",
+ *       "patch_user_reward"={
+ *         "method"="patch",
  *         "path"="/users/{id}/reward",
  *         "controller"= UserRewardAction::class,
  *         "denormalization_context"={"groups"={"user-reward"}},

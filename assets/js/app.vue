@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid h-100">
         <div class="row h-100">
-            <div class="col-lg-3 mh-100 d-flex flex-column bg-light">
+            <div class="col-xl-3 mh-lg-100 d-flex flex-column bg-light col-lg-6">
                 <div class="card mt-2">
                     <div class="card-body">
                         <spinner :spin="users === null">
@@ -28,8 +28,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 h-100 bg-light">
-                <div class="card mt-2 mb-2 mh-100 overflow-auto">
+            <div class="col-xl-3 h-100 d-flex flex-column bg-light col-lg-6">
+                <div class="card mt-2 mb-2 mh-lg-25 overflow-auto">
                     <div class="card-body">
                         <spinner :spin="questions === null || answers === null || users === null">
                             <questions :questions="questions"
@@ -47,7 +47,7 @@
                         </spinner>
                     </div>
                 </div>
-                <div class="card mt-2 mb-2 mh-100 overflow-auto">
+                <div class="card mt-2 mb-2 mh-lg-25 overflow-auto">
                     <div class="card-body">
                         <spinner :spin="events === null">
                             <events :events="events"
@@ -60,8 +60,21 @@
                         </spinner>
                     </div>
                 </div>
+                <div class="card mt-2 mb-2 flex-lg-grow-1 overflow-auto">
+                    <div class="card-body">
+                        <spinner :spin="tasks === null">
+                            <tasks :tasks="tasks"
+                                      :authorized="authorized"
+                                      @reward="reward"
+                                      @post-task="postTask"
+                                      @patch-task="patch"
+                                      @delete-task="deleteTask">
+                            </tasks>
+                        </spinner>
+                    </div>
+                </div>
             </div>
-            <div class="col-lg-6 h-100 bg-light">
+            <div class="col-xl-6 h-100 bg-light col-lg-12">
             </div>
         </div>
     </div>
@@ -77,6 +90,7 @@
     import Spinner from "./components/Spinner"
 
     import Noty from 'noty';
+    import Tasks from "./components/Tasks";
 
     const lang = document.documentElement.lang.substr(0, 2);
     moment.locale(lang);
@@ -96,6 +110,7 @@
             }
         },
         components: {
+            Tasks,
             Accounts,
             Events,
             Products,
@@ -132,6 +147,12 @@
             },
             deleteEvent: function (entity) {
                 this.delete(entity, this.events);
+            },
+            postTask: function (task) {
+                this.post("/api/tasks", task, this.tasks);
+            },
+            deleteTask: function (entity) {
+                this.delete(entity, this.tasks);
             },
             post: function (url, payload, list) {
                 axios.post(url, payload).then((response) => {
@@ -174,11 +195,19 @@
                     return response;
                 },
                 error => {
-                    new Noty({
-                        text: this.$t("messages.danger.request_failed") + " (" + error.response.data.status + ": " + error.response.data.detail + ")",
-                        theme: 'bootstrap-v4',
-                        type: 'error'
-                    }).show();
+                    if (error.response) {
+                        new Noty({
+                            text: this.$t("messages.danger.request_failed") + " (" + error.response.data.status + ": " + error.response.data.detail + ")",
+                            theme: 'bootstrap-v4',
+                            type: 'error'
+                        }).show();
+                    } else {
+                        new Noty({
+                            text: this.$t("messages.danger.request_failed") + " (" + error + ")",
+                            theme: 'bootstrap-v4',
+                            type: 'error'
+                        }).show();
+                    }
 
                     console.log("request failed");
                     console.log(error.response.data);
@@ -205,6 +234,10 @@
             const today = moment().startOf("day").format("YYYY-MM-DD");
             axios.get("/api/events?startAt[after]=" + today).then((response) => {
                 this.events = response.data["hydra:member"];
+            });
+
+            axios.get("/api/tasks").then((response) => {
+                this.tasks = response.data["hydra:member"];
             });
         }
     }

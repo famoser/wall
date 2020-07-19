@@ -28,8 +28,8 @@ Vue.config.productionTip = false;
 import { library, config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false
 
-import { faEdit, faTrash, faPlus, faSync, faPencil, faShoppingBag, faTimes } from '@fortawesome/pro-light-svg-icons';
-library.add(faEdit, faTrash, faPlus, faPencil, faShoppingBag, faSync, faTimes);
+import { faEdit, faTrash, faPlus, faSync, faPencil, faShoppingBag, faTimes, faCheck } from '@fortawesome/pro-light-svg-icons';
+library.add(faEdit, faTrash, faPlus, faPencil, faShoppingBag, faSync, faTimes, faCheck);
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 Vue.component('font-awesome-icon', FontAwesomeIcon);

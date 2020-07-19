@@ -30,8 +30,8 @@ class AppFixtures extends Fixture
     private function loadEvents(ObjectManager $manager)
     {
         $events = [
-            'Pasta Fun' => new \DateTime('today + 1 day'),
-            'Safe & Clean' => new \DateTime('today + 7 day'),
+            'Pasta Fun' => new \DateTime('today + 1 day + 19 hours'),
+            'Safe & Clean' => new \DateTime('today + 7 day + 18 hours'),
             'Birthday' => new \DateTime('today + 18 day'),
         ];
 
@@ -170,11 +170,13 @@ class AppFixtures extends Fixture
             'Vacuum' => 7,
         ];
 
+        $index = 0;
         foreach ($events as $name => $intervalInDays) {
             $event = new Task();
             $event->setName($name);
             $event->setIntervalInDays($intervalInDays);
             $event->setReward(strlen($name));
+            $event->setLastExecutionAt(new \DateTime('today - '.$index++.' days'));
 
             $manager->persist($event);
         }

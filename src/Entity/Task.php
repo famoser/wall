@@ -54,7 +54,6 @@ class Task extends BaseEntity
 
     /**
      * @var \DateTime|null
-     * @Assert\NotBlank
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
