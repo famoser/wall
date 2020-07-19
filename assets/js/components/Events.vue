@@ -1,24 +1,23 @@
 <template>
     <div>
-        <div v-if="authorized" class="mb-2">
-            <div class="btn-group-toggle d-inline">
-                <label class="btn btn-outline-secondary"
-                       :class="{'active': mode === 'edit' }">
-                    <input type="checkbox" autocomplete="off" :true-value="'edit'" :false-value="'view'" v-model="mode">
-                    <font-awesome-icon :icon="['fal', 'pencil']"></font-awesome-icon>
-                </label>
-            </div>
-
-            <button class="btn btn-outline-secondary" @click="add" v-if="mode === 'edit'">
+        <div v-if="editMode" class="mb-2">
+            <button class="btn btn-outline-secondary" @click="add">
                 <font-awesome-icon :icon="['fal', 'plus']"></font-awesome-icon>
             </button>
         </div>
 
-        <template v-for="event in orderedEvents">
-            <p class="mt-2">
+        <template v-if="!editMode" v-for="event in orderedEvents">
+            <p class="mb-3">
+                {{ formatDateTime(event.startAt) }} - {{event.name}} <br/>
+                <span class="text-secondary">{{ formatFromNow(event.startAt) }}</span>
+            </p>
+        </template>
+
+        <template v-if="editMode" v-for="event in orderedEvents">
+            <p class="mb-1">
                 {{ formatDateTime(event.startAt) }} - {{event.name}}
 
-                <span v-if="mode === 'edit'">
+                <span>
                     <button class="btn btn-sm" @click="edit(event)">
                         <font-awesome-icon
                                 class="text-warning"
@@ -77,20 +76,22 @@
                 type: Array,
                 required: true
             },
-            authorized: {
+            editMode: {
                 type: Boolean,
                 required: true
             }
         },
         data: function () {
             return {
-                selected: Object.assign({}, defaultEvent),
-                mode: 'view'
+                selected: Object.assign({}, defaultEvent)
             }
         },
         methods: {
             formatDateTime: function (date) {
                 return moment(date).format("DD.MM.YYYY HH:mm");
+            },
+            formatFromNow: function (data) {
+                return moment(data).fromNow()
             },
             confirmEdit: function () {
                 const payload = {

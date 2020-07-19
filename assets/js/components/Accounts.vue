@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="btn-group btn-group-toggle" v-if="mode === 'view'">
+        <div v-if="!editMode" class="btn-group btn-group-toggle">
             <label class="btn btn-outline-secondary"
                    v-for="user in users"
                    :id="user['@id']"
@@ -15,7 +15,7 @@
             </label>
         </div>
 
-        <div v-if="mode === 'edit'" class="d-inline mr-2">
+        <div v-if="editMode" class="d-inline mr-2">
             <div class="btn-group">
                 <button class="btn" @click="edit">
                     <font-awesome-icon class="text-warning" :icon="['fal', 'pencil']"></font-awesome-icon>
@@ -27,19 +27,19 @@
             {{authenticated.name}}
         </div>
 
-        <div class="btn-group-toggle d-inline" v-if="authorized">
+        <div v-if="authorized" class="btn-group-toggle d-inline">
             <label class="btn btn-outline-secondary"
-                   :class="{'active': mode === 'edit' }">
-                <input type="checkbox" autocomplete="off" :true-value="'edit'" :false-value="'view'" v-model="mode">
+                   :class="{'active': editMode }">
+                <input type="checkbox" autocomplete="off" @change="$emit('toggle-edit-mode')">
                 <font-awesome-icon :icon="['fal', 'pencil']"></font-awesome-icon>
             </label>
         </div>
 
-        <button class="btn btn-outline-secondary" @click="add" v-if="mode === 'edit' || this.users.length === 0">
+        <button v-if="editMode || this.users.length === 0" class="btn btn-outline-secondary" @click="add">
             <font-awesome-icon :icon="['fal', 'plus']"></font-awesome-icon>
         </button>
 
-        <button class="btn btn-outline-secondary float-md-right" @click="reload">
+        <button v-if="!editMode" class="btn btn-outline-secondary float-md-right" @click="reload">
             <font-awesome-icon :icon="['fal', 'sync']"></font-awesome-icon>
         </button>
 
@@ -86,6 +86,10 @@
             users: {
                 type: Array,
                 required: true
+            },
+            editMode: {
+                type: Boolean,
+                required: true
             }
         },
         data: function () {
@@ -93,7 +97,6 @@
                 authenticated: null,
                 selected: Object.assign({}, defaultUser),
                 pin: null,
-                mode: 'view',
                 modalAuthenticationShow: false,
                 newPin: null
             }
@@ -157,7 +160,7 @@
             confirmRemove: function () {
                 this.$emit("delete-user", this.authenticated);
                 this.logout();
-                this.mode = 'view'
+                this.$emit('toggle-edit-mode');
             },
             add: function () {
                 this.selected = Object.assign({}, defaultUser);

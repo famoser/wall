@@ -1,23 +1,15 @@
 <template>
     <div>
-        <div v-if="authorized" class="mb-2">
-            <div class="btn-group-toggle d-inline">
-                <label class="btn btn-outline-secondary"
-                       :class="{'active': mode === 'edit' }">
-                    <input type="checkbox" autocomplete="off" :true-value="'edit'" :false-value="'view'" v-model="mode">
-                    <font-awesome-icon :icon="['fal', 'pencil']"></font-awesome-icon>
-                </label>
-            </div>
-
-            <button class="btn btn-outline-secondary" @click="add" v-if="mode === 'edit'">
+        <div class="mb-2" v-if="authorized || editMode">
+            <button v-if="editMode" class="btn btn-outline-secondary" @click="add">
                 <font-awesome-icon :icon="['fal', 'plus']"></font-awesome-icon>
             </button>
 
-            <div class="btn-group-toggle d-inline">
+            <div v-if="authorized" class="btn-group-toggle d-inline">
                 <label class="btn btn-outline-secondary float-right"
-                       :class="{'active': mode === 'shopping' }">
-                    <input type="checkbox" autocomplete="off" :true-value="'shopping'" :false-value="'view'"
-                           v-model="mode">
+                       :class="{'active': shoppingMode }">
+                    <input type="checkbox" autocomplete="off" :true-value="true" :false-value="false"
+                           v-model="shoppingMode">
                     <font-awesome-icon :icon="['fal', 'shopping-bag']"></font-awesome-icon>
                 </label>
             </div>
@@ -36,7 +28,7 @@
                     >
                     <label class="custom-control-label" :for="product['@id']">
                         {{product.name}}
-                        <span v-if="mode === 'edit'">
+                        <span v-if="editMode">
                                 <button class="btn btn-sm" @click="edit(product)">
                                     <font-awesome-icon
                                             class="text-warning"
@@ -95,6 +87,10 @@
                 type: Array,
                 required: true
             },
+            editMode: {
+                type: Boolean,
+                required: true
+            },
             authorized: {
                 type: Boolean,
                 required: true
@@ -103,7 +99,7 @@
         data: function () {
             return {
                 selected: Object.assign({}, defaultProduct),
-                mode: 'view'
+                shoppingMode: false
             }
         },
         methods: {
@@ -173,7 +169,7 @@
             productCategories: function () {
                 const map = new Map();
                 let products = this.products;
-                if (this.mode === 'shopping') {
+                if (this.shoppingMode) {
                     products = products.filter(p => p.active);
                 }
 

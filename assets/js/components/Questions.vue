@@ -1,20 +1,12 @@
 <template>
     <div>
-        <div v-if="authorizedUser !== null" class="mb-2">
-            <div class="btn-group-toggle d-inline">
-                <label class="btn btn-outline-secondary"
-                       :class="{'active': mode === 'edit' }">
-                    <input type="checkbox" autocomplete="off" :true-value="'edit'" :false-value="'view'" v-model="mode">
-                    <font-awesome-icon :icon="['fal', 'pencil']"></font-awesome-icon>
-                </label>
-            </div>
-
-            <button class="btn btn-outline-secondary" @click="add" v-if="mode === 'edit'">
+        <div v-if="editMode" class="mb-2">
+            <button class="btn btn-outline-secondary" @click="add">
                 <font-awesome-icon :icon="['fal', 'plus']"></font-awesome-icon>
             </button>
         </div>
 
-        <template v-if="mode !== 'edit'" v-for="questionWithAnswer in questionsWithAnswers">
+        <template v-if="!editMode" v-for="questionWithAnswer in questionsWithAnswers">
             <p class="mb-0 mt-2">
                 <span class="lead">{{ questionWithAnswer.question.text }}</span>
                 <span v-if="questionWithAnswer.yes.length > 0" class="text-success ml-2">{{ questionWithAnswer.yes.join(", ") }}</span>
@@ -41,8 +33,8 @@
             </p>
         </template>
 
-        <template v-if="mode === 'edit'" v-for="question in questions">
-            <p class="lead mb-0">
+        <template v-if="editMode" v-for="question in questions">
+            <p class="mb-1">
                 {{ question.text }}
                 <button class="btn btn-sm" @click="edit(question)">
                     <font-awesome-icon
@@ -109,12 +101,15 @@
             authorizedUser: {
                 type: Object,
                 required: false
+            },
+            editMode: {
+                type: Boolean,
+                required: true
             }
         },
         data: function () {
             return {
-                selected: Object.assign({}, defaultQuestion),
-                mode: 'view'
+                selected: Object.assign({}, defaultQuestion)
             }
         },
         methods: {

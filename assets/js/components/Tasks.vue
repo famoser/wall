@@ -1,35 +1,36 @@
 <template>
     <div>
-        <div v-if="authorized" class="mb-2">
-            <div class="btn-group-toggle d-inline">
-                <label class="btn btn-outline-secondary"
-                       :class="{'active': mode === 'edit' }">
-                    <input type="checkbox" autocomplete="off" :true-value="'edit'" :false-value="'view'" v-model="mode">
-                    <font-awesome-icon :icon="['fal', 'pencil']"></font-awesome-icon>
-                </label>
-            </div>
-
-            <button class="btn btn-outline-secondary" @click="add" v-if="mode === 'edit'">
+        <div v-if="editMode" class="mb-2">
+            <button class="btn btn-outline-secondary" @click="add">
                 <font-awesome-icon :icon="['fal', 'plus']"></font-awesome-icon>
             </button>
         </div>
 
-        <template v-for="task in orderedTasks">
-            <div class="progress mt-2" v-if="mode === 'view'">
-                <div ref="progress" :class="'progress-' + Math.floor(Math.min(task.overduePercentage, 100))" class="progress-bar" role="progressbar" :aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+        <template v-if="!editMode" v-for="task in orderedTasks">
+            <div class="progress mt-2">
+                <div ref="progress"
+                     class="progress-bar" role="progressbar"
+                     :class="'progress-' + Math.floor(Math.min(task.overduePercentage, 100))">
+                </div>
             </div>
 
-            <p>
+            <p class="mb-3">
                 {{ task.task.name }}
 
-                <button v-if="mode === 'view' && authorized" class="btn btn-sm float-right" @click="done(task.task)">
+                <button v-if="authorized" class="btn btn-sm float-right" @click="done(task.task)">
                     <font-awesome-icon
                             class="text-success"
                             :icon="['fal', 'check']">
                     </font-awesome-icon>
                 </button>
+            </p>
+        </template>
 
-                <span v-if="mode === 'edit'">
+        <template v-if="editMode" v-for="task in orderedTasks">
+            <p class="mb-1">
+                {{ task.task.name }} -
+                ({{ task.task.intervalInDays}} / {{task.task.intervalInDays}})
+                <span>
                     <button class="btn btn-sm" @click="edit(task.task)">
                         <font-awesome-icon
                                 class="text-warning"
@@ -55,7 +56,9 @@
             </div>
             <div class="form-group row">
                 <div class="col-md-4">
-                    <label for="interval-in-days" class="col-form-label-lg">{{ $t('entity.task.interval_in_days') }}</label>
+                    <label for="interval-in-days" class="col-form-label-lg">
+                        {{ $t('entity.task.interval_in_days') }}
+                    </label>
                 </div>
                 <div class="col-md-8">
                     <input type="number" class="form-control form-control-lg" id="interval-in-days"
@@ -102,12 +105,15 @@
             authorized: {
                 type: Boolean,
                 required: true
+            },
+            editMode: {
+                type: Boolean,
+                required: true
             }
         },
         data: function () {
             return {
-                selected: Object.assign({}, defaultTask),
-                mode: 'view'
+                selected: Object.assign({}, defaultTask)
             }
         },
         methods: {
@@ -129,7 +135,7 @@
             },
             done: function (task) {
                 const payload = {
-                    "lastExecutionAt": moment().toISOString()
+                    "lastExecutionAt": moment().format()
                 };
 
                 this.$emit("patch-task", task, payload);
@@ -167,11 +173,11 @@
                     }
 
                     const diff = moment().diff(moment(task.lastExecutionAt));
-                    const diffInHours = moment.duration(diff).asHours();
-                    const relativeDiff = diffInHours / (task.intervalInDays * 24);
+                    const diffInHours = moment.duration(diff).asMinutes();
+                    const relativeDiff = diffInHours / (task.intervalInDays * 24 * 60);
 
                     return {
-                        overduePercentage: relativeDiff*100,
+                        overduePercentage: relativeDiff * 100,
                         task
                     }
                 })

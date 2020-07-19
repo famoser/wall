@@ -6,6 +6,8 @@
                     <div class="card-body">
                         <spinner :spin="users === null">
                             <accounts :users="users"
+                                      :edit-mode="editMode"
+                                      @toggle-edit-mode="editMode = !editMode"
                                       @select-user="selectUser"
                                       @post-user="postUser"
                                       @patch-user="patch"
@@ -18,7 +20,8 @@
                     <div class="card-body">
                         <spinner :spin="products === null">
                             <products :products="products"
-                                      :authorized="authorized"
+                                      :edit-mode="editMode"
+                                      :authorized="selectedUser !== null"
                                       @reward="reward"
                                       @post-product="postProduct"
                                       @patch-product="patch"
@@ -35,6 +38,7 @@
                             <questions :questions="questions"
                                        :answers="answers"
                                        :users="users"
+                                       :edit-mode="editMode"
                                        :authorized-user="selectedUser"
                                        @reward="reward"
                                        @post-question="postQuestion"
@@ -51,7 +55,7 @@
                     <div class="card-body">
                         <spinner :spin="events === null">
                             <events :events="events"
-                                    :authorized="authorized"
+                                    :edit-mode="editMode"
                                     @reward="reward"
                                     @post-event="postEvent"
                                     @patch-event="patch"
@@ -64,11 +68,12 @@
                     <div class="card-body">
                         <spinner :spin="tasks === null">
                             <tasks :tasks="tasks"
-                                      :authorized="authorized"
-                                      @reward="reward"
-                                      @post-task="postTask"
-                                      @patch-task="patch"
-                                      @delete-task="deleteTask">
+                                   :edit-mode="editMode"
+                                   :authorized="selectedUser !== null"
+                                   @reward="reward"
+                                   @post-task="postTask"
+                                   @patch-task="patch"
+                                   @delete-task="deleteTask">
                             </tasks>
                         </spinner>
                     </div>
@@ -105,6 +110,7 @@
                 answers: null,
                 tasks: null,
                 settings: null,
+                editMode: false,
                 selectedUser: null,
                 secret: null
             }
@@ -182,11 +188,6 @@
             },
             deleteAnswer: function (answer) {
                 this.delete(answer, this.answers);
-            }
-        },
-        computed: {
-            authorized: function () {
-                return this.selectedUser !== null;
             }
         },
         mounted() {
