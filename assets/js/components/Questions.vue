@@ -35,7 +35,7 @@
             </p>
         </template>
 
-        <template v-if="editMode" v-for="question in questions">
+        <template v-if="editMode" v-for="question in orderedQuestions">
             <p class="mb-1">
                 {{ question.text }}
                 <button class="btn btn-sm" @click="edit(question)">
@@ -187,11 +187,14 @@
             }
         },
         computed: {
+            orderedQuestions: function () {
+                return this.questions.sort((u1, u2) => u1.text.localeCompare(u2.text));
+            },
             questionsWithAnswers: function () {
                 let userNameById = {};
                 this.users.forEach(u => userNameById[u["@id"]] = u.name);
 
-                return this.questions.map(question => {
+                return this.orderedQuestions.map(question => {
                     const answers = this.answersForQuestion(question, this.answers);
                     const own = this.ownAnswer(answers);
 
