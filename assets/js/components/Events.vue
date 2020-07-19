@@ -90,7 +90,7 @@
         },
         methods: {
             formatDateTime: function (date) {
-                return moment(date).format("DD.MM.YYYY hh:mm");
+                return moment(date).format("DD.MM.YYYY HH:mm");
             },
             confirmEdit: function () {
                 const payload = {
@@ -130,10 +130,22 @@
             datePickerConfig: function () {
                 return {
                     altInput: true,
-                    altFormat: "d.m.Y H:i",
-                    dateFormat: "Y-m-dTH:i",
+                    altFormat: "DD.MM.YYYY HH:mm",
+                    dateFormat: "iso",
                     parseDate: (datestr, format) => {
-                        return moment(datestr, format, true).toISOString();
+                        if (format === "iso") {
+                            return moment(datestr).toDate();
+                        } else {
+                            return moment(datestr, format, true).toDate();
+                        }
+                    },
+                    formatDate: (date, format, locale) => {
+                        if (format === "iso") {
+                            return moment(date).toISOString();
+                        } else {
+                            return moment(date).format(format);
+                        }
+                        // locale can also be used
                     },
                     enableTime: true,
                     time_24hr: true
