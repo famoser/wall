@@ -31,7 +31,7 @@
         <template v-if="editMode" v-for="task in orderedTasks">
             <p class="mb-1">
                 {{ task.task.name }} -
-                ({{ task.task.intervalInDays}} / {{task.task.intervalInDays}})
+                ({{ task.task.intervalInDays}} / {{task.task.reward}})
                 <span>
                     <button class="btn btn-sm" @click="edit(task.task)">
                         <font-awesome-icon
