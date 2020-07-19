@@ -1,5 +1,11 @@
 <template>
     <div>
+        <p class="alert alert-success" v-if="this.users.length === 0">
+            {{ $t("accounts.welcome") }}!<br/>
+            {{ $t("accounts.wall_description") }}<br/>
+            {{ $t("accounts.create_account") }}
+        </p>
+
         <div v-if="!editMode" class="btn-group btn-group-toggle">
             <label class="btn btn-outline-secondary"
                    v-for="user in users"

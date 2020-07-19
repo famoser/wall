@@ -5,7 +5,13 @@
   "buttons": {
     "save": "Save"
   },
+  "accounts": {
+    "welcome": "welcome",
+    "wall_description": "this is a simple dashboard for you and your flatmates.",
+    "create_account": "create your first account to finish set up."
+  },
   "products": {
+    "no_products": "No products yet.",
     "categories": {
       "fruit_vegetables": "Fruits & Vegetables",
       "dairy_products_eggs": "Dairy Products & Eggs",
@@ -16,7 +22,14 @@
       "household": "Household"
     }
   },
+  "events": {
+    "no_events": "No planned events."
+  },
+  "tasks": {
+    "no_tasks": "No regular tasks."
+  },
   "questions": {
+    "no_questions": "No open questions.",
     "repetitions": {
       "none": "once",
       "daily": "daily"

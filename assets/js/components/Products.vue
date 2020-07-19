@@ -1,11 +1,13 @@
 <template>
     <div>
-        <div class="mb-2" v-if="authorized || editMode">
+        <p v-if="products.length === 0">{{ $t("products.no_products")}}</p>
+
+        <div class="mb-2" v-if="(authorized && someProductsToBuy) || editMode">
             <button v-if="editMode" class="btn btn-outline-secondary" @click="add">
                 <font-awesome-icon :icon="['fal', 'plus']"></font-awesome-icon>
             </button>
 
-            <div v-if="authorized" class="btn-group-toggle d-inline">
+            <div v-if="!editMode" class="btn-group-toggle d-inline">
                 <label class="btn btn-outline-secondary float-right"
                        :class="{'active': shoppingMode }">
                     <input type="checkbox" autocomplete="off" :true-value="true" :false-value="false"
@@ -166,6 +168,9 @@
             }
         },
         computed: {
+            someProductsToBuy: function() {
+                return this.products.some(p => p.active);
+            },
             productCategories: function () {
                 const map = new Map();
                 let products = this.products;

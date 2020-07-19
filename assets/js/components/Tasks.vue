@@ -1,5 +1,7 @@
 <template>
     <div>
+        <p v-if="tasks.length === 0">{{ $t("tasks.no_tasks")}}</p>
+
         <div v-if="editMode" class="mb-2">
             <button class="btn btn-outline-secondary" @click="add">
                 <font-awesome-icon :icon="['fal', 'plus']"></font-awesome-icon>
