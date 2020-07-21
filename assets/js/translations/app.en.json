@@ -24,7 +24,8 @@
   },
   "embed": {
     "no_content": "no content",
-    "value": "embeddable link"
+    "value": "embeddable link",
+    "unknown_type": "unknown data type"
   },
   "events": {
     "no_events": "No planned events."

@@ -10,7 +10,8 @@
 
         <template v-else>
             <img v-if="isImage" :src="setting.value">
-            <video v-else-if="isVideo" :src="setting.value"></video>
+            <video v-else-if="isVideo" autoplay="autoplay" :src="setting.value"></video>
+            <span v-else>{{ $t("embed.unknown_type")}}</span>
         </template>
 
         <b-modal id="modal-setting-edit" :centered="true" hide-header
@@ -64,10 +65,12 @@
         },
         computed: {
             isVideo: function () {
-                return this.setting.value
+                const videoTypes = ["webm", "mp4", "ogg"];
+                return videoTypes.some(it => this.setting.value.endsWith(it))
             },
-            imageEmbed: function () {
-
+            isImage: function () {
+                const imageTypes = ["png", "jpg", "gif", "webp"];
+                return imageTypes.some(it => this.setting.value.endsWith(it))
             }
         }
     }
