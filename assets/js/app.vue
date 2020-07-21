@@ -80,6 +80,15 @@
                 </div>
             </div>
             <div class="col-xl-6 h-100 bg-light col-lg-12">
+                <div class="card mt-2 mb-2 flex-lg-grow-1 overflow-auto">
+                    <div class="card-body">
+                        <link-embed :setting="settings.find(s => s.key === 'embed1')"
+                                    :edit-mode="editMode"
+                                    @post-setting="postSetting('embed1', ...arguments)"
+                                    @patch-setting="patch">
+                        </link-embed>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -96,6 +105,7 @@
 
     import Noty from 'noty';
     import Tasks from "./components/Tasks";
+    import LinkEmbed from "./components/LinkEmbed";
 
     const lang = document.documentElement.lang.substr(0, 2);
     moment.locale(lang);
@@ -109,13 +119,14 @@
                 questions: null,
                 answers: null,
                 tasks: null,
-                settings: null,
+                settings: [],
                 editMode: false,
                 selectedUser: null,
                 secret: null
             }
         },
         components: {
+            LinkEmbed,
             Tasks,
             Accounts,
             Events,
@@ -159,6 +170,10 @@
             },
             deleteTask: function (entity) {
                 this.delete(entity, this.tasks);
+            },
+            postSetting: function (key, setting) {
+                setting.key = key;
+                this.post("/api/settings", setting, this.settings);
             },
             post: function (url, payload, list) {
                 axios.post(url, payload).then((response) => {
@@ -239,6 +254,10 @@
 
             axios.get("/api/tasks").then((response) => {
                 this.tasks = response.data["hydra:member"];
+            });
+
+            axios.get("/api/settings").then((response) => {
+                this.settings = response.data["hydra:member"];
             });
         }
     }

@@ -22,6 +22,10 @@
       "household": "Household"
     }
   },
+  "embed": {
+    "no_content": "no content",
+    "value": "embeddable link"
+  },
   "events": {
     "no_events": "No planned events."
   },
