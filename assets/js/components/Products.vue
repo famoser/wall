@@ -79,7 +79,7 @@
     const defaultProduct = {
         "name": "",
         "category": 1,
-        "active": false
+        "active": true
     }
 
     export default {
@@ -128,7 +128,7 @@
             activeChanged: function (product) {
                 this.save(product);
 
-                if (this.mode === 'shopping') {
+                if (this.shoppingMode) {
                     this.$emit("reward", 1);
                 }
             },
