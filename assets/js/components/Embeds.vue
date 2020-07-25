@@ -59,7 +59,6 @@
                  @ok="confirmRemove">
             {{ $t("messages.danger.confirm_remove") }}
         </b-modal>
-
     </div>
 </template>
 
