@@ -169,6 +169,12 @@ class AppFixtures extends Fixture
         $embeds = [
             'https://via.placeholder.com/300C' => Embed::TYPE_IMAGE,
             'https://via.placeholder.com/150x400' => Embed::TYPE_IMAGE,
+            'https://via.placeholder.com/200C' => Embed::TYPE_IMAGE,
+            'https://via.placeholder.com/850x400' => Embed::TYPE_IMAGE,
+            'https://via.placeholder.com/250x400' => Embed::TYPE_IMAGE,
+            'https://via.placeholder.com/850x500' => Embed::TYPE_IMAGE,
+            'https://via.placeholder.com/650x900' => Embed::TYPE_IMAGE,
+            'https://via.placeholder.com/350x300' => Embed::TYPE_IMAGE,
             'https://img-9gag-fun.9cache.com/photo/a9nqRA1_460svvp9.webm' => Embed::TYPE_VIDEO,
             'Hold the vision, trust the process.' => Embed::TYPE_QUOTE,
             'https://www.youtube.com/watch?v=gOidsqd4OKo' => Embed::TYPE_YOUTUBE,

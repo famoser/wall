@@ -24,7 +24,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\HasLifecycleCallbacks
  * @ApiResource(
  *     normalizationContext={"groups"={"embed"}},
- *     denormalizationContext={"groups"={"embed"}}),
+ *     denormalizationContext={"groups"={"embed"}},
+ *     attributes={"order"={"createdAt": "DESC"}}
  * )
  */
 class Embed extends BaseEntity

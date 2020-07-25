@@ -23,6 +23,9 @@
     }
   },
   "embeds": {
+    "blockquote": {
+      "author": "Someone famous"
+    },
     "types": {
       "image": "image",
       "video": "video",

@@ -7,29 +7,34 @@
         </div>
 
         <masonry
-                :cols="{default: 3, 1800: 4, 992: 1}"
+                :cols="{default: 2, 1800: 4, 992: 1}"
                 :gutter="{default: '10px'}"
                 class="mt-2">
             <div class="grid-item" v-for="embed in embeds">
-                <div class="card">
-                    <div class="card-body">
-                        <div v-if="editMode" class="button-float">
-                            <button class="btn btn-outline-secondary" @click="remove(embed)">
-                                <font-awesome-icon :icon="['fal', 'trash']"></font-awesome-icon>
-                            </button>
-                        </div>
+                <div v-if="editMode" class="button-float-wrapper">
+                    <button class="btn btn-outline-secondary" @click="remove(embed)">
+                        <font-awesome-icon :icon="['fal', 'trash']"></font-awesome-icon>
+                    </button>
+                </div>
 
-                        <img v-if="embed.type === 1" class="img-fluid" :src="embed.content">
-                        <video v-else-if="embed.type === 2" :src="embed.content"></video>
-                        <p v-else-if="embed.type === 3" class="blockquote">
-                            {{embed.content}}
-                        </p>
-                        <iframe v-else-if="embed.type === 4" class="youtube"
-                                :src="embed.content"
-                                frameborder="0"
-                                allowfullscreen>
-                        </iframe>
-                    </div>
+                <img v-if="embed.type === 1"
+                     :src="embed.content"
+                     class="image">
+                <video v-else-if="embed.type === 2"
+                       :src="embed.content"
+                       class="video">
+                </video>
+                <blockquote v-else-if="embed.type === 3" class="blockquote p-2 bg-white border mb-0">
+                    <p class="mb-0">{{embed.content}}</p>
+                    <footer class="blockquote-footer">{{$t('embeds.blockquote.author')}}</footer>
+                </blockquote>
+                <div v-else-if="embed.type === 4"
+                     class="youtube-wrapper">
+                    <iframe
+                            class="youtube"
+                            :src="toEmbedUrl(embed.content)"
+                            allowfullscreen>
+                    </iframe>
                 </div>
             </div>
         </masonry>
@@ -58,15 +63,37 @@
     </div>
 </template>
 
-<style>
-    .button-float {
+<style scoped>
+    .button-float-wrapper {
         position: absolute;
+        z-index: 1000;
         right: 5px;
+        top: 5px;
+    }
+
+    .image, .video {
+        width: 100%;
+        height: auto;
+    }
+
+    .youtube-wrapper {
+        position: relative;
+        width: 100%;
+        padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    }
+
+    .youtube {
+        position: absolute;
         top: 0;
+        right: 0;
+
+        width: 100%;
+        height: 100%;
     }
 
     .grid-item {
         margin-bottom: 10px;
+        position: relative;
     }
 </style>
 
@@ -107,6 +134,9 @@
                     case 4:
                         return "youtube"
                 }
+            },
+            toEmbedUrl: function (youtubeUrl) {
+                return "https://www.youtube.com/embed/gOidsqd4OKo"
             },
             confirmEdit: function () {
                 const payload = {

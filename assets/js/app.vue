@@ -79,7 +79,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-6 mh-lg-100 bg-light col-lg-12">
+            <div class="col-xl-6 mh-lg-100 bg-light col-lg-12 overflow-auto">
                 <spinner :spin="embeds === null">
                     <embeds :embeds="embeds"
                            :edit-mode="editMode"
