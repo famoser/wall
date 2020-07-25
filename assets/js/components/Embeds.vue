@@ -12,7 +12,7 @@
                 class="mt-2">
             <div class="grid-item" v-for="embed in embeds">
                 <div v-if="editMode" class="button-float-wrapper">
-                    <button class="btn btn-outline-secondary" @click="remove(embed)">
+                    <button class="btn btn-outline-danger" @click="remove(embed)">
                         <font-awesome-icon :icon="['fal', 'trash']"></font-awesome-icon>
                     </button>
                 </div>
@@ -68,6 +68,8 @@
         z-index: 1000;
         right: 5px;
         top: 5px;
+        background: white;
+        opacity: 0.92;
     }
 
     .image, .video {
