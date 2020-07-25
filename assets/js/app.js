@@ -19,9 +19,11 @@ $(document).ready(function() {
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
 import { BootstrapVue } from 'bootstrap-vue';
+import VueMasonry from 'vue-masonry-css';
 
 Vue.use(VueI18n);
 Vue.use(BootstrapVue);
+Vue.use(VueMasonry);
 Vue.config.productionTip = false;
 
 // font awesome

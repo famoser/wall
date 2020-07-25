@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Answer;
+use App\Entity\Embed;
 use App\Entity\Event;
 use App\Entity\Product;
 use App\Entity\Question;
@@ -18,6 +19,7 @@ class AppFixtures extends Fixture
     {
         $this->loadEvents($manager);
         $this->loadProducts($manager);
+        $this->loadEmbed($manager);
         $users = $this->loadUsers($manager);
         $questions = $this->loadQuestions($manager);
         $this->loadAnswers($manager, $questions, $users);
@@ -157,6 +159,25 @@ class AppFixtures extends Fixture
             $event = new Setting();
             $event->setKey($key);
             $event->setValue($value);
+
+            $manager->persist($event);
+        }
+    }
+
+    private function loadEmbed(ObjectManager $manager)
+    {
+        $embeds = [
+            'https://via.placeholder.com/300C' => Embed::TYPE_IMAGE,
+            'https://via.placeholder.com/150x400' => Embed::TYPE_IMAGE,
+            'https://img-9gag-fun.9cache.com/photo/a9nqRA1_460svvp9.webm' => Embed::TYPE_VIDEO,
+            'Hold the vision, trust the process.' => Embed::TYPE_QUOTE,
+            'https://www.youtube.com/watch?v=gOidsqd4OKo' => Embed::TYPE_YOUTUBE,
+        ];
+
+        foreach ($embeds as $content => $type) {
+            $event = new Embed();
+            $event->setContent($content);
+            $event->setType($type);
 
             $manager->persist($event);
         }

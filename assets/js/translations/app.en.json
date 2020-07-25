@@ -22,10 +22,13 @@
       "household": "Household"
     }
   },
-  "embed": {
-    "no_content": "no content",
-    "value": "embeddable link",
-    "unknown_type": "unknown data type"
+  "embeds": {
+    "types": {
+      "image": "image",
+      "video": "video",
+      "quote": "quote",
+      "youtube": "youtube"
+    }
   },
   "events": {
     "no_events": "No planned events."
@@ -49,10 +52,14 @@
       "name": "Name",
       "pin": "PIN"
     },
+    "embed": {
+      "content": "Content",
+      "type": "Type"
+    },
     "task": {
-      "name": "name",
-      "interval_in_days": "interval in days",
-      "reward": "reward"
+      "name": "Name",
+      "interval_in_days": "Interval in days",
+      "reward": "Reward"
     },
     "product": {
       "name": "Name",
@@ -64,7 +71,7 @@
     },
     "question": {
       "text": "Question",
-      "repetition": "repeat"
+      "repetition": "Repeat"
     }
   },
   "messages": {

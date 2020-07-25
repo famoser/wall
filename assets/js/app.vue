@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid h-100">
         <div class="row h-100">
-            <div class="col-xl-3 mh-lg-100 d-flex flex-column bg-light col-lg-6">
+            <div class="col-xl-3 h-lg-100 d-flex flex-column bg-light col-lg-6">
                 <div class="card mt-2">
                     <div class="card-body">
                         <spinner :spin="users === null">
@@ -31,7 +31,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 h-100 d-flex flex-column bg-light col-lg-6">
+            <div class="col-xl-3 h-lg-100 d-flex flex-column bg-light col-lg-6">
                 <div class="card mt-2 mh-lg-25 overflow-auto">
                     <div class="card-body">
                         <spinner :spin="questions === null || answers === null || users === null">
@@ -79,16 +79,16 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-6 h-100 bg-light col-lg-12">
-                <div class="card mt-2 mb-2 flex-lg-grow-1 overflow-auto">
-                    <div class="card-body">
-                        <link-embed :setting="settings.find(s => s.key === 'embed1')"
-                                    :edit-mode="editMode"
-                                    @post-setting="postSetting('embed1', ...arguments)"
-                                    @patch-setting="patch">
-                        </link-embed>
-                    </div>
-                </div>
+            <div class="col-xl-6 mh-lg-100 bg-light col-lg-12">
+                <spinner :spin="embeds === null">
+                    <embeds :embeds="embeds"
+                           :edit-mode="editMode"
+                           @reward="reward"
+                           @post-embed="postEmbed"
+                           @patch-embed="patch"
+                           @delete-embed="deleteEmbed">
+                    </embeds>
+                </spinner>
             </div>
         </div>
     </div>
@@ -105,7 +105,7 @@
 
     import Noty from 'noty';
     import Tasks from "./components/Tasks";
-    import LinkEmbed from "./components/LinkEmbed";
+    import Embeds from "./components/Embeds";
 
     const lang = document.documentElement.lang.substr(0, 2);
     moment.locale(lang);
@@ -119,14 +119,14 @@
                 questions: null,
                 answers: null,
                 tasks: null,
-                settings: [],
+                embeds: null,
                 editMode: false,
                 selectedUser: null,
                 secret: null
             }
         },
         components: {
-            LinkEmbed,
+            Embeds,
             Tasks,
             Accounts,
             Events,
@@ -170,6 +170,12 @@
             },
             deleteTask: function (entity) {
                 this.delete(entity, this.tasks);
+            },
+            postEmbed: function (event) {
+                this.post("/api/embeds", event, this.embeds);
+            },
+            deleteEmbed: function (entity) {
+                this.delete(entity, this.embeds);
             },
             postSetting: function (key, setting) {
                 setting.key = key;
@@ -256,8 +262,8 @@
                 this.tasks = response.data["hydra:member"];
             });
 
-            axios.get("/api/settings").then((response) => {
-                this.settings = response.data["hydra:member"];
+            axios.get("/api/embeds").then((response) => {
+                this.embeds = response.data["hydra:member"];
             });
         }
     }
