@@ -25,7 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiResource(
  *     normalizationContext={"groups"={"embed"}},
  *     denormalizationContext={"groups"={"embed"}},
- *     attributes={"order"={"createdAt": "DESC"}}
+ *     attributes={"order"={"createdAt": "ASC"}}
  * )
  */
 class Embed extends BaseEntity

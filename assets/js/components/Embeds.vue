@@ -10,7 +10,7 @@
                 :cols="{default: 2, 1800: 4, 992: 1}"
                 :gutter="{default: '10px'}"
                 class="mt-2">
-            <div class="grid-item" v-for="embed in embeds">
+            <div class="grid-item" v-for="embed in orderedEmbeds">
                 <div v-if="editMode" class="button-float-wrapper">
                     <button class="btn btn-outline-danger" @click="remove(embed)">
                         <font-awesome-icon :icon="['fal', 'trash']"></font-awesome-icon>
@@ -22,7 +22,7 @@
                      class="image">
                 <video v-else-if="embed.type === 2"
                        :src="embed.content"
-                       class="video">
+                       class="video" controls>
                 </video>
                 <blockquote v-else-if="embed.type === 3" class="blockquote p-2 bg-white border mb-0">
                     <p class="mb-0">{{embed.content}}</p>
@@ -137,7 +137,15 @@
                 }
             },
             toEmbedUrl: function (youtubeUrl) {
-                return "https://www.youtube.com/embed/gOidsqd4OKo"
+                if (youtubeUrl.includes("youtube.com/embed")) {
+                    return youtubeUrl;
+                }
+
+                // get video id; like https://www.youtube.com/watch?v=OxGn-9qAi7Q&list=PLba_FJwIiiR_Mn3cAWwaI4JeBGLD6I2Us&index=5&t=0s
+                let url = new URL(youtubeUrl)
+                let viewId = url.searchParams.get('v')
+
+                return "https://www.youtube.com/embed/" + viewId
             },
             confirmEdit: function () {
                 const payload = {
@@ -164,6 +172,11 @@
                 this.selected = embed
 
                 this.$bvModal.show("modal-embed-remove");
+            }
+        },
+        computed: {
+            orderedEmbeds: function() {
+                return this.embeds.reverse();
             }
         }
     }
