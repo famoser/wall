@@ -1,6 +1,7 @@
 .idea
 .deploy
 .build
+.config
 
 ###> symfony/framework-bundle ###
 /.env.local

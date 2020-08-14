@@ -11,4 +11,12 @@ It provides the following functionality:
  - question (who's up for dinner?)
  - tasks (the kitchen should be cleaned again...)
  - events (are friends coming over in the next few days?)
- - departures (when does the next bus depart?)
+
+<img src="assets/images/screenshot.jpg?raw=true" alt="Screenshot">
+
+## Release
+
+`famoser/agnes` is set up to release new versions & deploy them.
+
+- `./vendor/bin/agnes release v.1.0.0 master` to release to master (and deploy to dev)
+- `./vendor/bin/agnes deploy *:*:prod master` to deploy to production
