@@ -176,7 +176,7 @@
         },
         computed: {
             orderedEmbeds: function() {
-                return this.embeds.reverse();
+                return [...this.embeds].reverse();
             }
         }
     }
