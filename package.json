@@ -1,32 +1,36 @@
 {
-  "devDependencies": {
+  "author": "Florian Moser <git@famoser.ch> (https://famoser.ch)",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.29",
     "@fortawesome/pro-light-svg-icons": "^5.13.1",
     "@fortawesome/vue-fontawesome": "fortawesome/vue-fontawesome",
-    "@symfony/webpack-encore": "^0.30.0",
-    "autoprefixer": "^9.8.2",
     "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
     "bootstrap-vue": "^2.15.0",
-    "core-js": "^3.0.0",
     "epic-spinners": "^1.1.0",
     "jquery": "^3.5.1",
     "moment": "^2.27.0",
-    "node-sass": "^4.14.1",
     "noty": "^3.2.0-beta",
     "popper.js": "^1.16.1",
+    "vue": "^2.5",
+    "vue-flatpickr-component": "^8.1.5",
+    "vue-i18n": "^8.18.2",
+    "vue-loader": "^15",
+    "vue-masonry-css": "^1.0.3"
+  },
+  "devDependencies": {
+    "@symfony/webpack-encore": "^0.30.0",
+    "autoprefixer": "^9.8.2",
+    "core-js": "^3.0.0",
+    "node-sass": "^4.14.1",
     "postcss-loader": "^3.0.0",
     "regenerator-runtime": "^0.13.2",
     "sass-loader": "^8.0.0",
-    "vue": "^2.5",
-    "vue-i18n": "^8.18.2",
-    "vue-loader": "^15",
-    "vue-masonry-css": "^1.0.3",
     "vue-template-compiler": "^2.6.11",
     "webpack-notifier": "^1.6.0"
   },
-  "license": "MIT",
-  "private": true,
   "scripts": {
     "dev-server": "encore dev-server --pfx=$HOME/.symfony/certs/default.p12 --https --port 8080 --disable-host-check",
     "dev": "encore dev",
@@ -38,8 +42,5 @@
     "last 2 versions",
     "Firefox ESR",
     "not dead"
-  ],
-  "dependencies": {
-    "vue-flatpickr-component": "^8.1.5"
-  }
+  ]
 }
