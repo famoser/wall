@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d7734e75c7e266ee4a310e305c32799",
+    "content-hash": "12c668b760d989e4b5700f99380958a5",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -7133,16 +7133,16 @@
         },
         {
             "name": "famoser/agnes",
-            "version": "v3.0.0",
+            "version": "v4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/famoser/agnes.git",
-                "reference": "e1b7d4d2674499ccfca5e3256a3627c4d9da9870"
+                "reference": "c50595e8874e77bfa1b5bd0c8c741786a9f43f85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/famoser/agnes/zipball/e1b7d4d2674499ccfca5e3256a3627c4d9da9870",
-                "reference": "e1b7d4d2674499ccfca5e3256a3627c4d9da9870",
+                "url": "https://api.github.com/repos/famoser/agnes/zipball/c50595e8874e77bfa1b5bd0c8c741786a9f43f85",
+                "reference": "c50595e8874e77bfa1b5bd0c8c741786a9f43f85",
                 "shasum": ""
             },
             "require": {
@@ -7193,7 +7193,7 @@
                 }
             ],
             "description": "Creates & deploys releases safely to various environments.",
-            "time": "2020-07-14T11:31:53+00:00"
+            "time": "2020-07-26T13:54:38+00:00"
         },
         {
             "name": "friendsofphp/php-cs-fixer",
