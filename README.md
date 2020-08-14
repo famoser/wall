@@ -4,13 +4,14 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/famoser/wall/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/famoser/wall/?branch=master)
 
 ## About
-Wall allows flat mates to coordinate repetitive endeavours.
+Wall helps flat mates to coordinate.
 
 It provides the following functionality:
  - shopping list (we need apples & tomatoes!)
- - question (who's up for dinner?)
+ - questions (who's up for dinner?)
  - tasks (the kitchen should be cleaned again...)
  - events (are friends coming over in the next few days?)
+ - embeds (want to share a funny image / video?)
 
 <img src="assets/images/screenshot.jpg?raw=true" alt="Screenshot">
 
