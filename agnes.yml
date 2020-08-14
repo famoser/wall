@@ -1,10 +1,13 @@
 agnes:
-  version: 3
-  config_folder: '.deploy'
-  build_target:
-    connection:
-      type: local
-    path: .build
+  version: 4
+
+config:
+  path: .config
+  repository:
+    url: git@gitlab.com:agnes-config/famoser-wall.git
+
+build:
+  path: .build
 
 github:
   api_token: '%env(GITHUB_API_TOKEN)%'
