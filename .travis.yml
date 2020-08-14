@@ -34,9 +34,9 @@ install:
   - composer install
 
   # frontend
-  # - npm config set "@fortawesome:registry" https://npm.fontawesome.com/
-  # - npm config set "//npm.fontawesome.com/:_authToken" $FONTAWESOME_AUTH_TOKEN
-  # - yarn install
+  - npm config set "@fortawesome:registry" https://npm.fontawesome.com/
+  - npm config set "//npm.fontawesome.com/:_authToken" $FONTAWESOME_AUTH_TOKEN
+  - yarn install
 
 # prepare tests
 before_script:
@@ -45,7 +45,7 @@ before_script:
 
 
   # frontend
-# - yarn encore production
+  - yarn encore production
 
 # execute tests
 script:
@@ -58,4 +58,4 @@ script:
   - php vendor/bin/simple-phpunit
 
   # frontend
-  # - yarn audit
+  - yarn audit --groups dependencies

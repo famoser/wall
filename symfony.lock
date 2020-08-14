@@ -381,9 +381,6 @@
     "symfony/http-kernel": {
         "version": "v5.1.2"
     },
-    "symfony/inflector": {
-        "version": "v5.1.2"
-    },
     "symfony/mime": {
         "version": "v5.1.2"
     },

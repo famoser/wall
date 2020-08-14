@@ -144,7 +144,7 @@
                     },
                     formatDate: (date, format, locale) => {
                         if (format === "iso") {
-                            return moment(date).toISOString();
+                            return moment(date).format();
                         } else {
                             return moment(date).format(format);
                         }
