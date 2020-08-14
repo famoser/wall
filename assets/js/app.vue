@@ -189,6 +189,8 @@
             },
             patch: function (entity, payload) {
                 axios.patch(entity['@id'], payload).then((response) => {
+                  console.log(payload);
+                  console.log(response.data);
                     Object.assign(entity, response.data);
                 });
             },
