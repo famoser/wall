@@ -40,10 +40,6 @@ install:
 
 # prepare tests
 before_script:
-  skip
-  # backend
-
-
   # frontend
   - yarn encore production
 
