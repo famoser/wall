@@ -50,7 +50,7 @@
             <div class="mb-4" v-if="index < productCategories.length - 1"></div>
         </template>
 
-        <b-modal id="modal-product-edit" :centered="true" hide-header
+        <b-modal id="modal-product-edit" :centered="true" hide-header no-close-on-backdrop
                  @ok="confirmEdit">
             <div class="form-group">
                 <input type="text" class="form-control form-control-lg" id="name"
@@ -66,7 +66,7 @@
             </div>
         </b-modal>
 
-        <b-modal id="modal-product-remove" :centered="true" hide-header
+        <b-modal id="modal-product-remove" :centered="true" hide-header no-close-on-backdrop
                  @ok="confirmRemove">
             {{ $t("messages.danger.confirm_remove") }}
         </b-modal>
@@ -136,6 +136,16 @@
                 this.save(this.selected);
             },
             save: function (product) {
+                // do not add existing product
+                if (!product["@id"]) {
+                    const existing = this.products.find(p => p.category === this.selected.category &&  p.name.toLowerCase() === this.selected.name.toLowerCase());
+                    if (existing) {
+                        existing.active = true;
+                        this.activeChanged(existing);
+                        return;
+                    }
+                }
+
                 const payload = {
                     "name": product.name,
                     "category": product.category,
@@ -152,7 +162,7 @@
                 this.$emit("delete-product", this.selected);
             },
             add: function () {
-                this.selected = Object.assign({}, defaultProduct)
+                this.selected = Object.assign({}, defaultProduct);
 
                 this.$bvModal.show("modal-product-edit");
             },

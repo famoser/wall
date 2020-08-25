@@ -53,7 +53,7 @@
             </p>
         </template>
 
-        <b-modal id="modal-question-edit" :centered="true" hide-header
+        <b-modal id="modal-question-edit" :centered="true" hide-header no-close-on-backdrop
                  @ok="confirmEdit">
             <div class="form-group">
                 <input type="text" class="form-control form-control-lg" id="text"
@@ -68,7 +68,7 @@
             </div>
         </b-modal>
 
-        <b-modal id="modal-question-remove" :centered="true" hide-header
+        <b-modal id="modal-question-remove" :centered="true" hide-header no-close-on-backdrop
                  @ok="confirmRemove">
             {{ $t("messages.danger.confirm_remove") }}
         </b-modal>

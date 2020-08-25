@@ -36,7 +36,7 @@
             </p>
         </template>
 
-        <b-modal id="modal-event-edit" :centered="true" hide-header
+        <b-modal id="modal-event-edit" :centered="true" hide-header no-close-on-backdrop
                  @ok="confirmEdit">
             <div class="form-group">
                 <input type="text" class="form-control form-control-lg" id="name"
@@ -54,7 +54,7 @@
             </div>
         </b-modal>
 
-        <b-modal id="modal-event-remove" :centered="true" hide-header
+        <b-modal id="modal-event-remove" :centered="true" hide-header no-close-on-backdrop
                  @ok="confirmRemove">
             {{ $t("messages.danger.confirm_remove") }}
         </b-modal>

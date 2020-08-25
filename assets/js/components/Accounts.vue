@@ -49,7 +49,7 @@
             <font-awesome-icon :icon="['fal', 'sync']"></font-awesome-icon>
         </button>
 
-        <b-modal id="modal-authentication" v-model="modalAuthenticationShow" :centered="true" hide-header
+        <b-modal id="modal-authentication" v-model="modalAuthenticationShow" :centered="true" hide-header no-close-on-backdropgi
                  @cancel="authenticated = null"
                  @ok="pinEntered">
             <div class="form-group">
@@ -58,7 +58,7 @@
             </div>
         </b-modal>
 
-        <b-modal id="modal-user-edit" :centered="true" hide-header
+        <b-modal id="modal-user-edit" :centered="true" hide-header no-close-on-backdrop
                  @ok="confirmEdit">
             <div class="form-group">
                 <input type="text" class="form-control form-control-lg" id="name"
@@ -72,7 +72,7 @@
             </div>
         </b-modal>
 
-        <b-modal id="modal-user-remove" :centered="true" hide-header
+        <b-modal id="modal-user-remove" :centered="true" hide-header no-close-on-backdrop
                  @ok="confirmRemove">
             {{ $t("messages.danger.confirm_remove") }}
         </b-modal>
