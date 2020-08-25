@@ -2,12 +2,14 @@
     <div>
         <p v-if="products.length === 0">{{ $t("products.no_products")}}</p>
 
-        <div class="mb-2" v-if="(authorized && someProductsToBuy) || editMode">
-            <button v-if="editMode" class="btn btn-outline-secondary" @click="add">
+        <div class="mb-2" v-if="editMode">
+            <button class="btn btn-outline-secondary" @click="add">
                 <font-awesome-icon :icon="['fal', 'plus']"></font-awesome-icon>
             </button>
+        </div>
 
-            <div v-if="!editMode" class="btn-group-toggle d-inline">
+        <div class="mb-2" v-if="!editMode && authorized && (shoppingMode || someProductsToBuy)" >
+            <div class="btn-group-toggle d-inline">
                 <label class="btn btn-outline-secondary float-right"
                        :class="{'active': shoppingMode }">
                     <input type="checkbox" autocomplete="off" :true-value="true" :false-value="false"
