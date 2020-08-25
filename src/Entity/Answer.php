@@ -24,6 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks
  * @ApiResource(
+ *     attributes={"pagination_enabled"=false},
  *     collectionOperations={"GET", "POST"},
  *     itemOperations={"GET", "DELETE"},
  *     normalizationContext={"groups"={"answer"}},

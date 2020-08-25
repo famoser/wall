@@ -21,7 +21,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks
- * @ApiResource
+ * @ApiResource(
+ *     attributes={"pagination_enabled"=false}
+ * )
  */
 class Setting extends BaseEntity
 {
