@@ -52,6 +52,10 @@
             <div class="mb-4" v-if="index < productCategories.length - 1"></div>
         </template>
 
+      <p v-if="shoppingMode && !someProductsToBuy" class="lead">
+        {{ $t('products.shopping_successful')}}
+      </p>
+
         <b-modal id="modal-product-edit" :centered="true" hide-header no-close-on-backdrop
                  @ok="confirmEdit">
             <div class="form-group">
