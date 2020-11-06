@@ -13,11 +13,9 @@ matrix:
   fast_finish: true
   include:
     # target version
-    - php: 7.2
+    - php: 7.3
       env:
         - COVERAGE=true
-    # next target version
-    - php: 7.4
 
 before_install:
   # backend

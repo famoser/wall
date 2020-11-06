@@ -80,6 +80,7 @@
                 </div>
             </div>
             <div class="col-xl-6 mh-lg-100 bg-light col-lg-12 overflow-auto">
+              <lazy-load :question="$t('embeds.load')">
                 <spinner :spin="embeds === null">
                     <embeds :embeds="embeds"
                            :edit-mode="editMode"
@@ -89,6 +90,7 @@
                            @delete-embed="deleteEmbed">
                     </embeds>
                 </spinner>
+              </lazy-load>
             </div>
         </div>
     </div>
@@ -106,6 +108,7 @@
     import Noty from 'noty';
     import Tasks from "./components/Tasks";
     import Embeds from "./components/Embeds";
+    import LazyLoad from "./components/LazyLoad";
 
     const lang = document.documentElement.lang.substr(0, 2);
     moment.locale(lang);
@@ -126,6 +129,7 @@
             }
         },
         components: {
+          LazyLoad,
             Embeds,
             Tasks,
             Accounts,

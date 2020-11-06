@@ -12,6 +12,7 @@
   },
   "products": {
     "no_products": "No products yet.",
+    "shopping_successful": "No more products to buy! :)",
     "categories": {
       "fruit_vegetables": "Fruits & Vegetables",
       "dairy_products_eggs": "Dairy Products & Eggs",
@@ -23,6 +24,7 @@
     }
   },
   "embeds": {
+    "load": "Load memes & more",
     "blockquote": {
       "author": "Someone famous"
     },
