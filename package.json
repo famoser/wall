@@ -17,7 +17,6 @@
     "vue": "^2.5",
     "vue-flatpickr-component": "^8.1.5",
     "vue-i18n": "^8.18.2",
-    "vue-loader": "^15",
     "vue-masonry-css": "^1.0.3"
   },
   "devDependencies": {
@@ -28,6 +27,7 @@
     "postcss-loader": "^6.0.0",
     "sass": "^1.49.8",
     "sass-loader": "^12.0.0",
+    "vue-loader": "^15",
     "vue-template-compiler": "^2.6.14"
   },
   "scripts": {
