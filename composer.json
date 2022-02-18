@@ -4,7 +4,7 @@
     "name": "famoser/wall",
     "description": "info wall for flat mates",
     "require": {
-        "php": "^7.3",
+        "php": "^7.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "api-platform/core": "^2.6",
@@ -55,7 +55,7 @@
         },
         "sort-packages": true,
         "platform": {
-            "php": "7.3"
+            "php": "7.4"
         },
         "allow-plugins": {
             "symfony/flex": true
