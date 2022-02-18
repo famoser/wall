@@ -23,9 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks
- * @ApiResource(
- *     attributes={"pagination_enabled"=false}
- * )
+ * @ApiResource()
  * @ApiFilter(DateFilter::class, properties={"startAt"}))
  */
 class Event extends BaseEntity

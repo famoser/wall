@@ -39,8 +39,12 @@
             </div>
         </masonry>
 
+        <b-button v-if="orderedEmbeds.length < embeds.length" @click="maxEntries += 10">
+          {{$t('embeds.show_more')}}
+        </b-button>
+
         <b-modal id="modal-embed-edit" :centered="true" hide-header no-close-on-backdrop
-                 @ok="confirmEdit">
+                 @ok="confirmEdit">maxEntries
             <div class="form-group">
                 <input type="text" class="form-control form-control-lg" id="content"
                        :placeholder="$t('entity.embed.content')"
@@ -120,7 +124,8 @@
         },
         data: function () {
             return {
-                selected: defaultEmbed
+                selected: defaultEmbed,
+                maxEntries: 10
             }
         },
         methods: {
@@ -137,15 +142,17 @@
                 }
             },
             toEmbedUrl: function (youtubeUrl) {
-                if (youtubeUrl.includes("youtube.com/embed")) {
-                    return youtubeUrl;
+                try {
+                  // get video id; like https://www.youtube.com/watch?v=OxGn-9qAi7Q&list=PLba_FJwIiiR_Mn3cAWwaI4JeBGLD6I2Us&index=5&t=0s
+                  let url = new URL(youtubeUrl)
+                  let viewId = url.searchParams.get('v')
+
+                  return "https://www.youtube.com/embed/" + viewId
+                } catch (e) {
+                  console.log(e)
                 }
 
-                // get video id; like https://www.youtube.com/watch?v=OxGn-9qAi7Q&list=PLba_FJwIiiR_Mn3cAWwaI4JeBGLD6I2Us&index=5&t=0s
-                let url = new URL(youtubeUrl)
-                let viewId = url.searchParams.get('v')
-
-                return "https://www.youtube.com/embed/" + viewId
+                return youtubeUrl
             },
             confirmEdit: function () {
                 const payload = {
@@ -176,7 +183,7 @@
         },
         computed: {
             orderedEmbeds: function() {
-                return [...this.embeds].reverse();
+                return [...this.embeds].reverse().slice(0, this.maxEntries);
             }
         }
     }

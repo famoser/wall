@@ -1,20 +1,18 @@
 build:
-  environment:
-    php: 7.2.13
   nodes:
     analysis:
+      environment:
+        node: v14
       project_setup:
         override: true
       tests:
         override:
           - php-scrutinizer-run --enable-security-analysis
-    coverage:
-      tests:
-        override:
-          - command: ./vendor/bin/simple-phpunit --coverage-clover=coverage.xml
-            coverage:
-              file: coverage.xml
-              format: clover
+
+checks:
+  php:
+    code_rating: true
+    duplication: true
 
 filter:
   paths: ["src/*"]

@@ -23,7 +23,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks
  * @ApiResource(
- *     attributes={"pagination_enabled"=false},
  *     normalizationContext={"skip_null_values" = false,"groups"={"task"}},
  *     denormalizationContext={"groups"={"task"}}),
  * )

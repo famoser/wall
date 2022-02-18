@@ -25,6 +25,7 @@
   },
   "embeds": {
     "load": "Load memes & more",
+    "show_more": "Load more",
     "blockquote": {
       "author": "Someone famous"
     },

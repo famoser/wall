@@ -8,15 +8,15 @@
             </button>
         </div>
 
-        <div class="mb-2" v-if="!editMode && authorized && (shoppingMode || someProductsToBuy)" >
-            <div class="btn-group-toggle d-inline">
-                <label class="btn btn-outline-secondary float-right"
-                       :class="{'active': shoppingMode }">
-                    <input type="checkbox" autocomplete="off" :true-value="true" :false-value="false"
-                           v-model="shoppingMode">
-                    <font-awesome-icon :icon="['fal', 'shopping-bag']"></font-awesome-icon>
-                </label>
-            </div>
+
+        <div class="input-group mb-2" v-if="!shoppingMode || someProductsToBuy">
+          <input type="text" class="form-control" placeholder="Search" v-model="search">
+          <label class="btn btn-outline-secondary"
+                 :class="{'active': shoppingMode }">
+            <input type="checkbox" class="d-none" autocomplete="off" :true-value="true" :false-value="false"
+                   v-model="shoppingMode">
+            <font-awesome-icon :icon="['fal', 'shopping-bag']"></font-awesome-icon>
+          </label>
         </div>
 
         <template v-for="(productCategory, index) in productCategories">
@@ -107,7 +107,8 @@
         data: function () {
             return {
                 selected: Object.assign({}, defaultProduct),
-                shoppingMode: false
+                shoppingMode: false,
+                search: ''
             }
         },
         methods: {
@@ -187,14 +188,22 @@
             someProductsToBuy: function() {
                 return this.products.some(p => p.active);
             },
+            filteredProducts: function () {
+              let products = this.products;
+              if (this.search) {
+                const searchLowerCase = this.search.toLowerCase();
+                products = products.filter(p => p.name && p.name.toLowerCase().includes(searchLowerCase))
+              }
+
+              if (this.shoppingMode) {
+                products = products.filter(p => p.active);
+              }
+
+              return products;
+            },
             productCategories: function () {
                 const map = new Map();
-                let products = this.products;
-                if (this.shoppingMode) {
-                    products = products.filter(p => p.active);
-                }
-
-                products.forEach((product) => {
+                this.filteredProducts.forEach((product) => {
                     const key = product.category;
                     let category = map.get(key);
                     if (!category) {
